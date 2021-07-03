@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8" />
+        <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <title>Vanime</title>
+        <link rel="stylesheet" href="../files/style/index.css" />
+        <link rel="stylesheet" href="../files/style/title.css" />
+        <link rel="stylesheet" href="../files/style/video.css" />
+        <link rel="stylesheet" href="../files/style/searchbox.css" />
+    </head>
+    <body>
+        <div id="title-container">
+            <div id="title">
+                <img src="../icons/logo.svg" height="25" />
+            </div>
+            <div id="title-buttons">
+                <button onclick="app.Minimize()">−</button>
+                <button onclick="app.ToggleMaximize()">&EmptySmallSquare;</button>
+                <button onclick="app.Close()">X</button>
+            </div>
+        </div>
+        <video id="video-player"></video>
+        
+        <div id="searchbox" class="hidden">
+            <canvas id="searchCanvas"></canvas>
+            <input type="text" onchange="SearchboxSearch(event)">
+            <div class="buttons">
+                <button onclick="SearchShowSearch()">Search</button>
+                <button class="inactive" onclick="SearchShowDownloaded()">Downloaded</button>
+            </div>
+        </div>
+    </body>
+    <script src="../files/js/titlebar.js"></script>
+    <script src="../files/js/Anime.js"></script>
+    <script src="../files/js/Video.js"></script>
+    <script src="../files/js/AnimeVideo.js"></script>
+    <script src="../files/js/VideoPlayer.js"></script>
+    <script src="../files/js/VideoQueue.js"></script>
+    <script src="../files/js/Searchbox.js"></script>
+    <script src="../files/js/main.js"></script>
+</html>

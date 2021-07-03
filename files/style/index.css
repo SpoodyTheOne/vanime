@@ -1,0 +1,13 @@
+:root {
+    --background: #2c3e50;
+    --background-second: #34495e;
+    --text: #ecf0f1;
+    --accent: #7658E7;
+    --warning: #e74c3c;
+    --info: #f1c40f;
+    --positive: #2ecc71;
+}
+
+body {
+    background-color: var(--background);
+}

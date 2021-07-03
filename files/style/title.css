@@ -1,0 +1,42 @@
+#title-container {
+    position: fixed;
+    top: 0px;
+    left: 0px;
+    right: 0px;
+    height: 25px;
+    background-color: var(--background-second);
+    padding-left: 5px;
+    display: flex;
+    justify-content: space-between;
+    line-height: 40px;
+    -webkit-app-region: drag;
+    -webkit-user-select: none;
+    transition: top 0.2s ease;
+    z-index: 500;
+}
+
+#title-container.hidden {
+    top: -25px;
+}
+
+#title-container #title-buttons {
+    -webkit-app-region: no-drag;
+    display: flex;
+}
+
+#title-buttons button {
+    width: 30px;
+    border: none;
+    background-color: transparent;
+    color: var(--text);
+    transition: background-color 0.1s ease;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif
+}
+
+#title-buttons button:hover {
+    background-color: var(--accent);
+}
+
+#title-buttons button:nth-child(3):hover {
+    background-color: var(--warning);
+}
