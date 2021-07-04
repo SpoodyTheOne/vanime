@@ -9,3 +9,7 @@
 	background-color: transparent !important;
 	outline: none;
 }
+
+#video-player.hide-cursor {
+	cursor: none;
+}

@@ -188,10 +188,12 @@ VideoPlayer.video.addEventListener("timeupdate", () => {
 		!MouseOverControls
 	) {
 		ControlsElement.classList.add("hidden");
+		VideoPlayer.video.classList.add("hide-cursor")
 	}
 });
 
 VideoPlayer.video.addEventListener("mousemove", () => {
 	ControlsElement.classList.remove("hidden");
+	VideoPlayer.video.classList.remove("hide-cursor")
 	VideoPlayer.LastInputTimestamp = VideoPlayer.video.currentTime;
 });
