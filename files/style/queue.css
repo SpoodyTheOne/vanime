@@ -1,0 +1,26 @@
+#video-queue {
+	display: relative;
+	width: 100%;
+	height: 100%;
+}
+
+#video-queue .queue {
+	display: flex;
+	align-items: center;
+	padding: 5px;
+}
+
+#video-queue .queue .video {
+	height: 100%;
+	width: 128px;
+	display: flex;
+	flex-wrap: wrap;
+	justify-content: center;
+	line-height: normal;
+	text-align: center;
+	margin: 5px;
+}
+
+#video-queue .queue .video .image {
+	height: 180px;
+}

@@ -6,7 +6,9 @@ class VideoQueue {
 	static index = 0;
 
 	static AddVideo = (video) => {
-		VideoQueue.Videos.push(video);
+		let queuedVideo = VideoQueue.AddQueueElement(video);
+
+		VideoQueue.Videos.push(queuedVideo);
 
 		if (VideoQueue.Videos.length - 1 == VideoQueue.index) video.play();
 
@@ -92,5 +94,22 @@ class VideoQueue {
 		VideoQueue.button.classList.toggle("fa-flip-vertical");
 
 		VideoPlayer.Pause();
+	};
+
+	static AddQueueElement = (video) => {
+		//really hoping I define AnimeVideo.anime all places where this is called.
+		//because im gonna use anime.image for this
+		let queue = document.querySelector("#video-queue .queue");
+
+		let newVideo = document.createElement("div");
+		newVideo.classList.add("video");
+		newVideo.innerHTML = `<img src="${
+			video.anime.image.src
+		}" class="image"><marquee class="name">${video.GetName()}</marquee><span class="episode">Season ${
+			video.season
+		} Episode ${video.episode}</span>`;
+		queue.appendChild(newVideo);
+
+		return QueuedVideo.VideoToQueuedVideo(video, newVideo);
 	};
 }

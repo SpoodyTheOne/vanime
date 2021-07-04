@@ -8,8 +8,8 @@ class DownloadedVideo extends AnimeVideo {
 
 		//disable download
 		this.download = () => {
-			return new Promise((r, rej) => {
-				rej("Already downloaded");
+			return new Promise((resolve, reject) => {
+				reject("Already downloaded");
 			});
 		};
 

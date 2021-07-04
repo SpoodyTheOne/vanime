@@ -129,14 +129,17 @@ let ControlsElement = document.getElementById("controls");
 let PlayPauseButton = document.querySelector("#controls .buttons i.fa-play");
 let MuteButton = document.querySelector("#controls .buttons i.fa-volume-up");
 /** @type {HTMLSpanElement} */
-let VideoNameSpan = document.querySelector("#controls .name span.name");
+let VideoNameSpan = document.querySelector("#controls .name .name");
 /** @type {HTMLSpanElement} */
 let VideoSeasonSpan = document.querySelector(
-	"#controls .name span.episode .season"
+	"#controls .name .episode .season"
 );
+
+let MouseOverControls = false;
+
 /** @type {HTMLSpanElement} */
 let VideoEpisodeSpan = document.querySelector(
-	"#controls .name span.episode .episode"
+	"#controls .name .episode .episode"
 );
 
 progress.addEventListener("mouseenter", () => {
@@ -158,12 +161,20 @@ progress.addEventListener("keydown", (event) => {
 	KeyHandler({ key: event.key, target: { tagName: "" } });
 });
 
+ControlsElement.addEventListener("mouseenter",() => {
+	MouseOverControls = true;
+})
+
+ControlsElement.addEventListener("mouseleave",() => {
+	MouseOverControls = false;
+})
+
 VideoPlayer.video.addEventListener("timeupdate", () => {
 	//@ts-ignore
 	if (!progress.seeking)
 		progress.value = VideoPlayer.video.currentTime.toString();
 
-	if (VideoPlayer.video.currentTime > VideoPlayer.LastInputTimestamp + 2) {
+	if (VideoPlayer.video.currentTime > VideoPlayer.LastInputTimestamp + 2 && !MouseOverControls) {
 		ControlsElement.classList.add("hidden");
 	}
 });

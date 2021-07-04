@@ -14,6 +14,7 @@
 		<link rel="stylesheet" href="../files/style/video.css" />
 		<link rel="stylesheet" href="../files/style/searchbox.css" />
 		<link rel="stylesheet" href="../files/style/controls.css" />
+		<link rel="stylesheet" href="../files/style/queue.css" />
 	</head>
 	<body>
 		<div id="title-container">
@@ -58,7 +59,9 @@
 				<input type="range" id="video-progress" max=0 value=0></input>
 			</div>
 
-			<div class="queue"></div>
+			<div id="video-queue">
+				<div class="queue"></div>
+			</div>
 		</div>
 
 		<div class="search-stuff">
@@ -76,11 +79,13 @@
 			<button id="searchBtn" onclick="Searching ? ShowingEpisodes ? ShowingEpisodes = false : CloseSearch() : OpenSearch()"><i class="fas fa-bars"></i></button>
 		</div>
 	</body>
+	
 	<script src="../files/js/titlebar.js"></script>
 	<script src="../files/js/Anime.js"></script>
 	<script src="../files/js/Video.js"></script>
 	<script src="../files/js/AnimeVideo.js"></script>
 	<script src="../files/js/DownloadedVideo.js"></script>
+	<script src="../files/js/QueuedVideo.js"></script>
 	<script src="../files/js/VideoPlayer.js"></script>
 	<script src="../files/js/VideoQueue.js"></script>
 	<script src="../files/js/Searchbox.js"></script>
