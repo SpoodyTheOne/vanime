@@ -39,7 +39,7 @@
 						<span class="episode">Season <span class="season">1</span> Episode <span class="episode">1</span></span>
 					</div>
 					<button onclick="VideoQueue.ToggleVisible()">
-						<i class="fas fa-chevron-circle-down"></i>
+						<i class="fas fa-chevron-circle-down fa-flip-vertical"></i>
 					</button>
 				</div>
 
@@ -64,7 +64,7 @@
 		<div class="search-stuff">
 			<div id="searchbox" class="hidden">
 				<canvas id="searchCanvas"></canvas>
-				<input type="text" onchange="SearchboxSearch(event)" />
+				<input type="text" onchange="SearchboxSearch(event)" placeholder="Search..."/>
 				<div class="buttons">
 					<button onclick="SearchShowSearch()">Search</button>
 					<button class="inactive" onclick="SearchShowDownloaded()">
