@@ -122,6 +122,15 @@ VideoPlayer.video.addEventListener("durationchange", () => {
 	progress.max = VideoPlayer.video.duration.toString();
 });
 
+VideoPlayer.video.addEventListener("loadeddata", () => {
+	if (!document.fullscreenElement)
+		//@ts-ignore
+		ResizeWindow(
+			VideoPlayer.video.videoWidth,
+			VideoPlayer.video.videoHeight
+		);
+});
+
 /** @type {HTMLInputElement} */
 // @ts-ignore
 let progress = document.getElementById("video-progress");
@@ -161,20 +170,23 @@ progress.addEventListener("keydown", (event) => {
 	KeyHandler({ key: event.key, target: { tagName: "" } });
 });
 
-ControlsElement.addEventListener("mouseenter",() => {
+ControlsElement.addEventListener("mouseenter", () => {
 	MouseOverControls = true;
-})
+});
 
-ControlsElement.addEventListener("mouseleave",() => {
+ControlsElement.addEventListener("mouseleave", () => {
 	MouseOverControls = false;
-})
+});
 
 VideoPlayer.video.addEventListener("timeupdate", () => {
 	//@ts-ignore
 	if (!progress.seeking)
 		progress.value = VideoPlayer.video.currentTime.toString();
 
-	if (VideoPlayer.video.currentTime > VideoPlayer.LastInputTimestamp + 2 && !MouseOverControls) {
+	if (
+		VideoPlayer.video.currentTime > VideoPlayer.LastInputTimestamp + 2 &&
+		!MouseOverControls
+	) {
 		ControlsElement.classList.add("hidden");
 	}
 });

@@ -81,8 +81,28 @@ ipcMain.handle("Download", (event, data) => {
 		data.name
 	);
 });
+
 ipcMain.handle("GetDownloaded", () => {
 	return DownloadManager.getDownloaded();
+});
+
+ipcMain.handle("ResizeWindow", (event, size) => {
+	console.log("resize window");
+
+	let diff = 1;
+
+	if (size.width < 800) {
+		diff = 800 / size.width;
+	} else if (size.height < 600) {
+		diff = 600 / size.height;
+	}
+
+	size.width = Math.round(size.width * diff);
+	size.height = Math.round(size.height * diff);
+
+	console.log(size);
+
+	window.setSize(size.width, size.height, true);
 });
 
 app.whenReady().then(() => {

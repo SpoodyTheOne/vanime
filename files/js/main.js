@@ -53,6 +53,11 @@ function getDownloaded() {
 	});
 }
 
+function ResizeWindow(x,y)
+{
+	return app.ResizeWindow(x,y);
+}
+
 let KeyHandler = (event) => {
 	/** @type {HTMLElement} */
 	let target = event.target;

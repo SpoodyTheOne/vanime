@@ -47,6 +47,10 @@ class app {
 	static GetDownloaded = () => {
 		return ipcRenderer.invoke("GetDownloaded");
 	};
+
+	static ResizeWindow = (x, y) => {
+		return ipcRenderer.invoke("ResizeWindow", { width: x, height: y });
+	};
 }
 
 //@ts-ignore
