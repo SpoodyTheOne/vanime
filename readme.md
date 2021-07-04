@@ -15,7 +15,6 @@ Vanime currenly has the following features
 # Todo
 Adding a watched list, which keeps track of episodes watched and timestamps in said episodes.
 A to watch list where you can add shows you are planning on watching.
-Adding a counter for downloaded episodes in downloaded tab
 
 # Screenshots
 Watching shows
