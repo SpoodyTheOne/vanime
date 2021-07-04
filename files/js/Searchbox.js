@@ -12,7 +12,8 @@ let DownloadedAnime = [];
 
 window.addEventListener("resize", SearchWindowResize);
 
-window.addEventListener("keydown", (ev) => {
+let SearchKeyHandler = (ev) => {
+	return;
 	if (ev.key == "Escape") {
 		if (ShowingEpisodes) {
 			ShowingEpisodes = false;
@@ -20,7 +21,9 @@ window.addEventListener("keydown", (ev) => {
 			if (Searching) CloseSearch();
 		}
 	}
-});
+}
+
+window.addEventListener("keydown", SearchKeyHandler);
 
 canvas.addEventListener("mousemove", (event) => {
 	mouse.x = event.clientX;

@@ -53,7 +53,7 @@ function getDownloaded() {
 	});
 }
 
-window.addEventListener("keydown", (event) => {
+let KeyHandler = (event) => {
 	/** @type {HTMLElement} */
 	let target = event.target;
 
@@ -70,25 +70,22 @@ window.addEventListener("keydown", (event) => {
 				return false;
 			//fullscreen
 			case "f":
-				if (document.fullscreenElement) {
-					document.exitFullscreen();
-				} else {
-					document.documentElement.requestFullscreen();
-					titleBar.classList.add("hidden");
-				}
+				VideoPlayer.ToggleFullscreen();
 				break;
 			//seek back
 			case "ArrowLeft":
-				//VideoPlayer.Seek(-5);
+				VideoPlayer.Seek(-5);
 				break;
 			//seek forward
 			case "ArrowRight":
-				//VideoPlayer.Seek(5);
+				VideoPlayer.Seek(5);
 				break;
 			//toggle mute
 			case "m":
-				//VideoPlayer.ToggleMute();
+				VideoPlayer.ToggleMute();
 				break;
 		}
 	}
-});
+};
+
+window.addEventListener("keydown", KeyHandler);

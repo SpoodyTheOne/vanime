@@ -81,4 +81,16 @@ class VideoQueue {
 		VideoPlayer.Pause();
 		VideoQueue.Videos[VideoQueue.index].play();
 	};
+
+	//html part
+
+	static controls = document.getElementById("controls");
+	static button = document.querySelector("#controls .top button");
+
+	static ToggleVisible = () => {
+		VideoQueue.controls.classList.toggle("queue-visible");
+		VideoQueue.button.classList.toggle("fa-flip-vertical");
+
+		VideoPlayer.Pause();
+	};
 }

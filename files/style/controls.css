@@ -1,18 +1,106 @@
 #controls {
 	position: fixed;
 	width: 100%;
-	height: 50px;
-	bottom: 0px;
+	height: 350px;
+	top: calc(100% - 70px);
 	left: 0px;
 	right: 0px;
+	background-color: var(--background-third);
+
+	transition: top 0.15s ease;
+
+	line-height: 65px;
+}
+
+#controls.hidden {
+	top: 100% !important;
+}
+
+#controls.hidden + .search-stuff #searchBtn {
+	display: none;
+}
+
+#controls.queue-visible {
+	top: calc(100% - 350px);
 }
 
 #controls .name {
 	display: flex;
 	justify-content: space-between;
+	align-items: center;
+	height: 70px;
 	padding: 5px;
 }
 
-#controls .name span {
+#controls .name .info {
 	font-size: 110%;
+	max-width: 35%;
+	height: 70px;
+	display: flex;
+	flex-wrap: wrap;
+}
+
+#controls .name .info .name {
+	width: 100%;
+	margin-top: 15px;
+	margin-left: -5px;
+	line-height: normal;
+	height: 10px;
+	white-space: nowrap;
+	word-wrap: normal;
+	overflow: hidden;
+}
+
+#controls .name .info .episode {
+	font-size: 80%;
+	margin-top: -16px;
+	line-height: normal;
+}
+
+#controls .name button {
+	font-size: 200%;
+	background-color: transparent;
+	border: none;
+	color: var(--text);
+	transition: color 0.1s ease;
+}
+
+#controls .name button:hover {
+	color: var(--accent);
+}
+
+#controls .top {
+	background-color: var(--background-second);
+}
+
+#controls .top .buttons {
+	position: absolute;
+	top: 0px;
+	width: 50%;
+	height: 70px;
+
+	left: 50%;
+	transform: translateX(-50%);
+
+	display: flex;
+	justify-content: center;
+	align-items: center;
+}
+
+#controls .top .buttons i {
+	margin: 10px;
+	font-size: 150%;
+	transition: color 0.1s ease;
+}
+
+#controls .top .buttons i:hover {
+	color: var(--accent);
+}
+
+#controls .top #video-progress {
+	position: absolute;
+	top: -2.5px;
+	left: 0px;
+	right: 0px;
+	width: 100%;
 }

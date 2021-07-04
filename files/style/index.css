@@ -1,6 +1,7 @@
 :root {
 	--background: #2c3e50;
 	--background-second: #34495e;
+	--background-third: #2b3540;
 	--text: #ecf0f1;
 	--accent: #7658e7;
 	--warning: #e74c3c;
@@ -12,4 +13,32 @@
 
 body {
 	background-color: var(--background);
+}
+
+input[type="range"] {
+	overflow: hidden;
+	-webkit-appearance: none;
+	background-color: #95a5a6;
+	outline: none;
+	border-radius: 0px;
+}
+
+input[type="range"]::-webkit-slider-runnable-track {
+	height: 10px;
+	-webkit-appearance: none;
+	margin-top: -1px;
+}
+
+input[type="range"]::-webkit-slider-thumb {
+	width: 0px;
+	-webkit-appearance: none;
+	height: 100%;
+	background: var(--text);
+	box-shadow: -100vw 0 0 100vw var(--text);
+	transition: box-shadow 0.1s ease-out, width 0.1s ease-out;
+}
+
+input[type="range"]:hover::-webkit-slider-thumb {
+	box-shadow: -100vw 0 0 100vw var(--accent);
+	width: 10px;
 }

@@ -1,6 +1,6 @@
 {
 	"name": "vanime",
-	"version": "1.0.0-hotfix.01",
+	"version": "1.0.1",
 	"description": "",
 	"main": "index.js",
 	"scripts": {
@@ -21,6 +21,7 @@
 		"puppeteer": "^10.1.0"
 	},
 	"build": {
+		"productName":"Vanime Video Streamer",
 		"icon": "./icons/icon.png",
 		"extraFiles": [
 			".env"

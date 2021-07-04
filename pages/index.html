@@ -32,26 +32,48 @@
 		<video id="video-player"></video>
 
 		<div id="controls">
-			<div class="name">
-				<span>video name</span>
-				<button
-					onclick="if (Searching) CloseSearch(); else OpenSearch();"
-				>
-					<i class="fas fa-bars"></i>
-				</button>
+			<div class="top">
+				<div class="name">
+					<div class="info">
+						<span class="name">No Episode</span>
+						<span class="episode">Season <span class="season">1</span> Episode <span class="episode">1</span></span>
+					</div>
+					<button onclick="VideoQueue.ToggleVisible()">
+						<i class="fas fa-chevron-circle-down"></i>
+					</button>
+				</div>
+
+				<div class="buttons">
+					<i
+						class="fas fa-volume-up"
+						title="mute"
+						onclick="VideoPlayer.ToggleMute()"
+					></i>
+					<i class="fas fa-backward" title="backward" onclick="VideoQueue.LastVideo()"></i>
+					<i class="fas fa-play" title="play/pause" onclick="VideoPlayer.Toggle()"></i>
+					<i class="fas fa-forward" title="forward" onclick="VideoQueue.NextVideo()"></i>
+					<i class="fas fa-expand" title="full screen" onclick="VideoPlayer.ToggleFullscreen()"></i>
+				</div>
+
+				<input type="range" id="video-progress" max=0 value=0></input>
 			</div>
-			<div class="buttons"></div>
+
+			<div class="queue"></div>
 		</div>
 
-		<div id="searchbox" class="hidden">
-			<canvas id="searchCanvas"></canvas>
-			<input type="text" onchange="SearchboxSearch(event)" />
-			<div class="buttons">
-				<button onclick="SearchShowSearch()">Search</button>
-				<button class="inactive" onclick="SearchShowDownloaded()">
-					Downloaded
-				</button>
+		<div class="search-stuff">
+			<div id="searchbox" class="hidden">
+				<canvas id="searchCanvas"></canvas>
+				<input type="text" onchange="SearchboxSearch(event)" />
+				<div class="buttons">
+					<button onclick="SearchShowSearch()">Search</button>
+					<button class="inactive" onclick="SearchShowDownloaded()">
+						Downloaded
+					</button>
+				</div>
 			</div>
+			
+			<button id="searchBtn" onclick="Searching ? ShowingEpisodes ? ShowingEpisodes = false : CloseSearch() : OpenSearch()"><i class="fas fa-bars"></i></button>
 		</div>
 	</body>
 	<script src="../files/js/titlebar.js"></script>
