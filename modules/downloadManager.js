@@ -20,19 +20,12 @@ function createIfNotExist(path) {
 }
 
 function download(url, anime, season, episode, name) {
-	addToList(anime, season, episode, name).then((data) => {
-		//Download episode video file
-		//@ts-ignore
-		fetch(url).then(
-			(
-				/** @type {{ body: { pipe: (arg0: fs.WriteStream) => void; }; }} */ res
-			) => {
-				createIfNotExist(path.join(data.url, "../"));
-				const dest = fs.createWriteStream(data.url);
-				res.body.pipe(dest);
-				canDownload = true;
-			}
-		);
+	return addToList(anime, season, episode, name).then((data) => {
+		if (data == null) {
+			return new Promise((resolve, reject) => {
+				reject("Video already downloaded");
+			});
+		}
 
 		//download anime image if not already downloaded
 		let p = path.join(data.url, "../../");
@@ -46,6 +39,20 @@ function download(url, anime, season, episode, name) {
 				res.body.pipe(dest);
 			});
 		}
+
+		//Download episode video file
+		//@ts-ignore
+		return fetch(url).then(
+			(
+				/** @type {{ body: { pipe: (arg0: fs.WriteStream) => void; }; }} */ res
+			) => {
+				createIfNotExist(path.join(data.url, "../"));
+				const dest = fs.createWriteStream(data.url);
+				res.body.pipe(dest);
+				canDownload = true;
+				return data.url;
+			}
+		);
 	});
 }
 
@@ -90,7 +97,12 @@ function addToList(anime, season, episode, name) {
 					"image.jpg"
 				),
 				episodes: [],
+				seasons: {},
 			};
+		}
+
+		if (data[anime.name]?.seasons[season]?.episodes[episode] != undefined) {
+			return;
 		}
 
 		let episodeData = {
@@ -105,7 +117,16 @@ function addToList(anime, season, episode, name) {
 			),
 		};
 
+		if (!data[anime.name]?.seasons[season])
+			data[anime.name].seasons[season] = { episodes: {} };
+
+		data[anime.name].seasons[season].episodes[episode] = true;
+
 		data[anime.name].episodes.push(episodeData);
+
+		data[anime.name].episodes.sort((a, b) => {
+			return a.season - b.season || a.episode - b.episode;
+		});
 
 		fs.promises.writeFile(file, JSON.stringify(data));
 

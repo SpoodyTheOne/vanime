@@ -43,6 +43,52 @@ function getDownloaded() {
 			out.push(a);
 		}
 
-		return out;
+		// out.forEach((anime) => {
+		// 	anime.episodes.sort((a, b) => {
+		// 		return a.season - b.season || a.episode - b.episode;
+		// 	});
+		// });
+
+		return { parsed: out, raw: data };
 	});
 }
+
+window.addEventListener("keydown", (event) => {
+	/** @type {HTMLElement} */
+	let target = event.target;
+
+	if (target.tagName != "INPUT") {
+		switch (event.key) {
+			//pause / play
+			case "Enter":
+				target.blur();
+				break;
+			case " ":
+				VideoPlayer.Toggle();
+				target.blur();
+				event.preventDefault();
+				return false;
+			//fullscreen
+			case "f":
+				if (document.fullscreenElement) {
+					document.exitFullscreen();
+				} else {
+					document.documentElement.requestFullscreen();
+					titleBar.classList.add("hidden");
+				}
+				break;
+			//seek back
+			case "ArrowLeft":
+				//VideoPlayer.Seek(-5);
+				break;
+			//seek forward
+			case "ArrowRight":
+				//VideoPlayer.Seek(5);
+				break;
+			//toggle mute
+			case "m":
+				//VideoPlayer.ToggleMute();
+				break;
+		}
+	}
+});

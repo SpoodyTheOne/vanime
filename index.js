@@ -1,6 +1,6 @@
 // @ts-check
 //initialize process.env variables
-const { app, BrowserWindow, ipcMain } = require("electron");
+const { app, BrowserWindow, ipcMain, Menu } = require("electron");
 require("dotenv").config();
 const Anime = require("./modules/requestAnime");
 const DownloadManager = require("./modules/downloadManager");
@@ -25,6 +25,21 @@ function CreateWindow() {
 	});
 
 	window.loadFile(path.join(__dirname, "/pages/index.html"));
+
+	const template = [
+		{
+			label: "Vanime",
+			submenu: [
+				{ role: "reload" },
+				{ role: "forceReload" },
+				{ role: "toggleDevTools" },
+			],
+		},
+	];
+
+	// @ts-ignore
+	const menu = Menu.buildFromTemplate(template);
+	Menu.setApplicationMenu(menu);
 
 	// setTimeout(() => {
 	//     Anime.search("tensei slime").then((data) => {
@@ -57,7 +72,6 @@ ipcMain.handle("GetEpisodeVideo", (event, url) => {
 	return Anime.getEpisodeVideo(url);
 });
 
-
 ipcMain.handle("Download", (event, data) => {
 	DownloadManager.download(
 		data.url,
@@ -68,7 +82,7 @@ ipcMain.handle("Download", (event, data) => {
 	);
 });
 ipcMain.handle("GetDownloaded", () => {
-    return DownloadManager.getDownloaded();
+	return DownloadManager.getDownloaded();
 });
 
 app.whenReady().then(() => {

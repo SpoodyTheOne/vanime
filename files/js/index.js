@@ -1,6 +1,7 @@
 //@ts-check
 const { ipcRenderer, contextBridge } = require("electron");
 
+//
 class app {
 	static Minimize = () => {
 		ipcRenderer.send("Minimize");

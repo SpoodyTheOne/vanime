@@ -19,6 +19,21 @@ class VideoQueue {
 		for (let vid of VideoQueue.Videos) {
 			if (vid == video) {
 				VideoQueue.Videos.splice(i, 1);
+
+				//clamp index between 0 and the
+				//amount of videos
+				VideoQueue.index = Math.min(
+					Math.max(VideoQueue.index, VideoQueue.Videos.length - 1),
+					0
+				);
+
+				if (VideoQueue.Videos.length == 0) {
+					VideoPlayer.video.src = "";
+					return;
+				}
+
+				let vid = VideoQueue.Videos[VideoQueue.index];
+				VideoPlayer.SetVideo(vid, vid instanceof DownloadedVideo);
 				break;
 			}
 			i++;

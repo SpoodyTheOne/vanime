@@ -13,11 +13,10 @@ class VideoPlayer {
 		VideoPlayer.video.pause();
 	};
 	static Toggle = () => {
-		VideoPlayer.IsPlaying ? VideoPlayer.Pause() : VideoPlayer.Play();
+		VideoPlayer.IsPlaying() ? VideoPlayer.Pause() : VideoPlayer.Play();
 	};
 	static SetVideo = (video, downloaded) => {
 		VideoPlayer.video.src = "";
-		VideoPlayer.video.controls = true;
 
 		if (downloaded)
 			return new Promise((resolve) => {
@@ -61,6 +60,10 @@ class VideoPlayer {
 	};
 }
 
-VideoPlayer.video.addEventListener("ended",() => {
-    VideoQueue.NextVideo();
-})
+VideoPlayer.video.addEventListener("ended", () => {
+	VideoQueue.NextVideo();
+});
+
+VideoPlayer.video.addEventListener("click", () => {
+	VideoPlayer.Toggle();
+});

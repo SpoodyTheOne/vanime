@@ -8,6 +8,8 @@ const searchBox = document.getElementById("searchbox");
 
 let Searching = false;
 
+let DownloadedAnime = [];
+
 window.addEventListener("resize", SearchWindowResize);
 
 window.addEventListener("keydown", (ev) => {
@@ -16,7 +18,6 @@ window.addEventListener("keydown", (ev) => {
 			ShowingEpisodes = false;
 		} else {
 			if (Searching) CloseSearch();
-			else OpenSearch();
 		}
 	}
 });
@@ -74,36 +75,50 @@ let width = 0;
 function drawSearchCanvas() {
 	ctx.clearRect(0, 0, canvas.width, canvas.height);
 
+	//if the user clicked this frame
 	if (
 		(mouse.clicked || mouse.rightclicked) &&
 		!Loading &&
 		(AnimeList.length > 0 || EpisodeList.length > 0)
 	) {
+		//calculate what episode they where hovering over
+		//as a number relative to the middle episode
 		let c = mouse.x - canvas.width / 2;
-
 		let g = Math.round(c / width);
 
+		//check if the episode was the middle (current) one
 		if (g == 0) {
+			//if the click was a right click
+			//download
 			if (mouse.rightclicked) {
+				//check if viewing anime list, not episode lost
 				if (!ShowingEpisodes) {
+					//get current anime
 					CurrentAnime = AnimeList[Math.round(AnimeIndex)];
+					//display loading screen
 					Loading = true;
+					//loop over each episode in anime
+					//and call download.
+					//500ms delay, otherwise puppeteer times out.
 					CurrentAnime?.getEpisodes().then((episodes) => {
 						EpisodeList = episodes;
-						Loading = false;
 						let index = 0;
 						EpisodeList.forEach((episode) => {
 							setTimeout(() => {
 								episode.download();
+								DownloadedAnime[CurrentAnime.name].seasons[
+									episode.season
+								].episodes[episode.episode] = true;
 							}, 500 * index);
 							index++;
 						});
+						Loading = false;
 					});
 				} else {
 					Loading = true;
 					EpisodeList[Math.round(EpisodeIndex)]
 						?.download()
-						.then(() => {
+						.finally(() => {
 							Loading = false;
 						});
 				}
@@ -116,6 +131,9 @@ function drawSearchCanvas() {
 					Loading = true;
 					CurrentAnime?.getEpisodes().then((episodes) => {
 						EpisodeList = episodes;
+						EpisodeList.forEach((episode) => {
+							episode.anime = CurrentAnime;
+						});
 						Loading = false;
 					});
 				} else {
@@ -173,7 +191,7 @@ function drawSearchCanvas() {
 		ctx.fillText(
 			AnimeList[Math.round(AnimeIndex)]?.name || "",
 			canvas.width / 2,
-			120,
+			90,
 			canvas.width - 20
 		);
 	} else {
@@ -192,10 +210,11 @@ function drawSearchCanvas() {
 				15 * Math.abs(i - EpisodeIndex);
 
 			if (Episode.InQueue) {
-				ctx.fillStyle = "#f1c40f";
-				ctx.beginPath();
-				ctx.ellipse(x + width / 2, y - 30, 20, 20, 0, 0, 2 * Math.PI);
-				ctx.fill();
+				ctx.fillText("Queued", x + width / 2, y - 5);
+			}
+
+			if (IsDownloaded(Episode)) {
+				ctx.fillText("Downloaded", x + width / 2, y + height + 30);
 			}
 
 			try {
@@ -211,7 +230,7 @@ function drawSearchCanvas() {
 		ctx.fillText(
 			EpisodeList[Math.round(EpisodeIndex)]?.name || "",
 			canvas.width / 2,
-			120,
+			90,
 			canvas.width - 20
 		);
 	}
@@ -284,14 +303,20 @@ function SearchShowDownloaded() {
 	// @ts-ignore
 	document.querySelector("#searchbox input").style.display = "none";
 
-	//TODO: set AnimeList to data from /appdata/downloaded.json
+	GetDownloadedAnime();
+}
+
+function GetDownloadedAnime() {
 	AnimeList = [];
 
 	Loading = true;
 
-	getDownloaded().then((data) => {
-		AnimeList = data;
+	return getDownloaded().then((data) => {
+		AnimeList = data.parsed;
 		Loading = false;
+		ShowingEpisodes = false;
+		AnimeIndex = 0;
+		DownloadedAnime = data.raw;
 	});
 }
 
@@ -300,9 +325,25 @@ function SearchShowSearch() {
 	buttons[1].classList.add("inactive");
 	buttons[0].classList.remove("inactive");
 	// @ts-ignore
-	document.querySelector("#searchbox input").style.display = "block";
-    AnimeList = [];
+	let input = document.querySelector("#searchbox input");
+	// @ts-ignore
+	input.style.display = "block";
+	SearchboxSearch({ srcElement: input });
+	AnimeList = [];
+	ShowingEpisodes = false;
+}
+
+function IsDownloaded(video) {
+	return DownloadedAnime[video?.anime?.name]?.seasons[video?.season]
+		?.episodes[video?.episode]
+		? true
+		: false;
 }
 
 SearchWindowResize();
+setTimeout(() => {
+	GetDownloadedAnime().then(() => {
+		AnimeList = [];
+	});
+}, 100);
 //OpenSearch();
