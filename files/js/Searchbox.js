@@ -189,7 +189,12 @@ function drawSearchCanvas() {
 					count += Object.keys(seasons[season].episodes).length;
 				}
 
-				ctx.fillText(count + " Episodes", x + width/2, y + height + 25, width);
+				ctx.fillText(
+					count + " Episodes",
+					x + width / 2,
+					y + height + 25,
+					width
+				);
 			}
 		}
 
@@ -341,6 +346,9 @@ function SearchShowSearch() {
 	SearchboxSearch({ srcElement: input });
 	AnimeList = [];
 	ShowingEpisodes = false;
+
+	//@ts-ignore
+	input.focus();
 
 	tab = "Search";
 }
