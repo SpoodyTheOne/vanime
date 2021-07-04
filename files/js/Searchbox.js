@@ -7,6 +7,7 @@ const ctx = canvas.getContext("2d");
 const searchBox = document.getElementById("searchbox");
 
 let Searching = false;
+let tab = "Search";
 
 let DownloadedAnime = [];
 
@@ -21,7 +22,7 @@ let SearchKeyHandler = (ev) => {
 			if (Searching) CloseSearch();
 		}
 	}
-}
+};
 
 window.addEventListener("keydown", SearchKeyHandler);
 
@@ -168,23 +169,27 @@ function drawSearchCanvas() {
 			canvas.width - 20
 		);
 	} else if (!ShowingEpisodes) {
-		ctx.globalAlpha = 1;
-		for (let i = 0; i < AnimeList.length; i++) {
-			try {
-				let anime = AnimeList[i];
-				ctx.drawImage(
-					anime.image,
-					canvas.width / 2 -
-						width / 2 +
-						(width + 20) * (i - AnimeIndex),
-					canvas.height / 2 -
-						height / 2 +
-						15 * Math.abs(i - AnimeIndex),
-					width,
-					height
-				);
-			} catch {
-				//lol
+		for (let k = 0; k < 10; k++) {
+			let i = Math.round(k + (AnimeIndex - 5));
+			let anime = AnimeList[i];
+			if (!anime) continue;
+			//try {
+			let x =
+				canvas.width / 2 - width / 2 + (width + 20) * (i - AnimeIndex);
+			let y =
+				canvas.height / 2 - height / 2 + 15 * Math.abs(i - AnimeIndex);
+
+			ctx.drawImage(anime.image, x, y, width, height);
+			if (tab == "Downloaded") {
+				let count = 0;
+
+				let seasons = DownloadedAnime[anime.name].seasons;
+
+				for (let season in seasons) {
+					count += Object.keys(seasons[season].episodes).length;
+				}
+
+				ctx.fillText(count + " Episodes", x + width/2, y + height + 25, width);
 			}
 		}
 
@@ -306,6 +311,8 @@ function SearchShowDownloaded() {
 	// @ts-ignore
 	document.querySelector("#searchbox input").style.display = "none";
 
+	tab = "Downloaded";
+
 	GetDownloadedAnime();
 }
 
@@ -334,6 +341,8 @@ function SearchShowSearch() {
 	SearchboxSearch({ srcElement: input });
 	AnimeList = [];
 	ShowingEpisodes = false;
+
+	tab = "Search";
 }
 
 function IsDownloaded(video) {
