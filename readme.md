@@ -13,8 +13,8 @@ Vanime currenly has the following features
  - Queueing episodes (WIP, Currently has no UI)
 
 # Todo
-Adding a watched list, which keeps track of episodes watched and timestamps in said episodes.
-A to watch list where you can add shows you are planning on watching.
+ - A watched list, which keeps track of episodes watched and timestamps in said episodes.
+ - A to watch list where you can add shows you are planning on watching.
 
 # Screenshots
 Watching shows
