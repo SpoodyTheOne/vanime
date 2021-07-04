@@ -1,12 +1,12 @@
 :root {
-	--background: #2c3e50;
-	--background-second: #34495e;
-	--background-third: #2b3540;
+	--background: #0a3d62;
+	--background-second: #3c6382;
 	--text: #ecf0f1;
-	--accent: #7658e7;
+	--accent: #3498db;
 	--warning: #e74c3c;
 	--info: #f1c40f;
 	--positive: #2ecc71;
+	--dark: #222f3e;
 	font-family: Arial, Helvetica, sans-serif;
 	color: var(--text);
 }

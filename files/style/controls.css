@@ -5,7 +5,7 @@
 	top: calc(100% - 70px);
 	left: 0px;
 	right: 0px;
-	background-color: var(--background-third);
+	background-color: var(--background-second);
 
 	transition: top 0.15s ease;
 
@@ -51,7 +51,7 @@
 	overflow: hidden;
 }
 
-#controls .name .info .episode {
+#controls .name .info > .episode {
 	font-size: 80%;
 	margin-top: -16px;
 	line-height: normal;
@@ -70,7 +70,7 @@
 }
 
 #controls .top {
-	background-color: var(--background-second);
+	border-bottom: 2px solid var(--background);
 }
 
 #controls .top .buttons {

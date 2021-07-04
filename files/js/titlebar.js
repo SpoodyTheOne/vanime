@@ -3,7 +3,7 @@ const titleBar = document.getElementById("title-container");
 let hideTitlebarTimer = null;
 
 window.addEventListener("mousemove", (event) => {
-	if (event.clientY < 50) {
+	if (event.clientY < 25) {
 		showTitlebar();
 	}
 });
