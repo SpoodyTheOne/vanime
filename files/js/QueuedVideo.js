@@ -19,10 +19,12 @@ class QueuedVideo extends AnimeVideo {
 		if (video instanceof DownloadedVideo) {
 			let newVideo = new QueuedDownloadedVideo(video, element);
 			newVideo.id = video.id;
+			newVideo.anime = video.anime;
 			return newVideo;
 		} else {
 			let newVideo = new QueuedVideo(video, element);
 			newVideo.id = video.id;
+			newVideo.anime = video.anime;
 			return newVideo;
 		}
 	};

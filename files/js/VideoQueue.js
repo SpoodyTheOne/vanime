@@ -52,11 +52,11 @@ class VideoQueue {
 			if (video instanceof AnimeVideo) {
 				let playNext = false;
 
-				for (let vid of video?.anime.episodes) {
+				for (let vid of video?.anime?.episodes) {
 					if (playNext) {
 						VideoQueue.AddVideo(vid);
 						break;
-					} else if (vid == video) {
+					} else if (vid.id == video.id) {
 						playNext = true;
 					}
 				}
