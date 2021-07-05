@@ -1,6 +1,6 @@
 // @ts-check
 class VideoQueue {
-	/** @type {Video[]} */
+	/** @type {QueuedVideo[]} */
 	static Videos = [];
 
 	static index = 0;
@@ -19,8 +19,9 @@ class VideoQueue {
 	static RemoveVideo = (video) => {
 		let i = 0;
 		for (let vid of VideoQueue.Videos) {
-			if (vid == video) {
+			if (vid.id == video.id) {
 				VideoQueue.Videos.splice(i, 1);
+				vid.element.remove();
 
 				//clamp index between 0 and the
 				//amount of videos
@@ -34,8 +35,8 @@ class VideoQueue {
 					return;
 				}
 
-				let vid = VideoQueue.Videos[VideoQueue.index];
-				VideoPlayer.SetVideo(vid, vid instanceof DownloadedVideo);
+				let nvid = VideoQueue.Videos[VideoQueue.index];
+				VideoPlayer.SetVideo(nvid, nvid instanceof DownloadedVideo);
 				break;
 			}
 			i++;
@@ -70,6 +71,7 @@ class VideoQueue {
 
 		VideoPlayer.Pause();
 		VideoQueue.Videos[VideoQueue.index].play();
+		VideoQueue.UpdateQueueElements();
 	};
 
 	static LastVideo = () => {
@@ -82,6 +84,39 @@ class VideoQueue {
 
 		VideoPlayer.Pause();
 		VideoQueue.Videos[VideoQueue.index].play();
+		VideoQueue.UpdateQueueElements();
+	};
+
+	static UpdateQueueElements = () => {
+		let videoIndex = 0;
+		for (let video of VideoQueue.Videos) {
+			if (videoIndex < VideoQueue.index) {
+				video.element.classList.add("watched");
+			} else {
+				video.element.classList.remove("watched");
+			}
+			videoIndex++;
+		}
+	};
+
+	static SkipToVideo = (queuedVideo) => {
+		let index = 0;
+		for (let video of VideoQueue.Videos) {
+			console.log("loop");
+			if (video.id == queuedVideo.id) {
+				console.log("found");
+				VideoQueue.SkipToIndex(index);
+				break;
+			}
+			index++;
+		}
+	};
+
+	static SkipToIndex = (index) => {
+		//calls all the code thats responsible for handeling new videos
+		//without refactoring
+		VideoQueue.index = index - 1;
+		VideoQueue.NextVideo();
 	};
 
 	//html part
@@ -109,6 +144,16 @@ class VideoQueue {
 			video.season
 		} Episode ${video.episode}</span>`;
 		queue.appendChild(newVideo);
+
+		newVideo.addEventListener("click", (event) => {
+			if (event.button == 0) {
+				VideoQueue.SkipToVideo(video);
+			}
+		});
+
+		newVideo.addEventListener("contextmenu", (event) => {
+			VideoQueue.RemoveVideo(video);
+		});
 
 		return QueuedVideo.VideoToQueuedVideo(video, newVideo);
 	};

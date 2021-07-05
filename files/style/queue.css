@@ -24,3 +24,12 @@
 #video-queue .queue .video .image {
 	height: 180px;
 }
+
+#video-queue .queue .video .name {
+	height: 30px;
+}
+
+#video-queue .queue .video.watched {
+	opacity: 0.5;
+	filter: brightness(0.5);
+}

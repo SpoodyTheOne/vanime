@@ -13,5 +13,8 @@ class Video {
 		this.GetName = () => {
 			return this.name.split("Season").shift().split("Episode").shift();
 		};
+
+		//random id so i can compare videos across classes
+		this.id = Math.random();
 	}
 }

@@ -144,13 +144,7 @@ function drawSearchCanvas() {
 					let Episode = EpisodeList[Math.round(EpisodeIndex)];
 					//Episode.play();
 					//CloseSearch();
-					if (!Episode.InQueue) {
-						VideoQueue.AddVideo(Episode);
-						Episode.InQueue = true;
-					} else {
-						VideoQueue.RemoveVideo(Episode);
-						Episode.InQueue = false;
-					}
+					VideoQueue.AddVideo(Episode);
 				}
 			}
 		} else {
@@ -221,10 +215,6 @@ function drawSearchCanvas() {
 				canvas.height / 2 -
 				height / 2 +
 				15 * Math.abs(i - EpisodeIndex);
-
-			if (Episode.InQueue) {
-				ctx.fillText("Queued", x + width / 2, y - 5);
-			}
 
 			if (IsDownloaded(Episode)) {
 				ctx.fillText("Downloaded", x + width / 2, y + height + 30);

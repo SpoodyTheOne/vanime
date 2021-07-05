@@ -10,14 +10,20 @@ class QueuedVideo extends AnimeVideo {
 			video.ova,
 			video.movie
 		);
+
+		/** @type {HTMLDivElement} */
 		this.element = element;
 	}
 
 	static VideoToQueuedVideo = (video, element) => {
 		if (video instanceof DownloadedVideo) {
-			return new QueuedDownloadedVideo(video, element);
+			let newVideo = new QueuedDownloadedVideo(video, element);
+			newVideo.id = video.id;
+			return newVideo;
 		} else {
-			return new QueuedVideo(video, element);
+			let newVideo = new QueuedVideo(video, element);
+			newVideo.id = video.id;
+			return newVideo;
 		}
 	};
 }
@@ -33,6 +39,8 @@ class QueuedDownloadedVideo extends DownloadedVideo {
 			video.ova,
 			video.movie
 		);
+
+		/** @type {HTMLDivElement} */
 		this.element = element;
 	}
 }
