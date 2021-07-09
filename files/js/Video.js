@@ -4,12 +4,6 @@ class Video {
 		this.name = name;
 		this.url = url;
 
-		this.play = () => {
-			VideoPlayer.SetVideo(this).then(() => {
-				VideoPlayer.Play();
-			});
-		};
-
 		this.GetName = () => {
 			return this.name.split("Season").shift().split("Episode").shift();
 		};
@@ -17,4 +11,15 @@ class Video {
 		//random id so i can compare videos across classes
 		this.id = Math.random();
 	}
+
+	play(downloaded) {
+		VideoPlayer.SetVideo(this, downloaded ? true : false).then(() => {
+			VideoPlayer.Play();
+		});
+	}
+
+	static GetWatched = () => {
+		// @ts-ignore
+		return app.GetWatched();
+	};
 }

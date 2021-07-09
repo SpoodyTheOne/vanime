@@ -69,9 +69,12 @@
 				<canvas id="searchCanvas"></canvas>
 				<input type="text" onchange="SearchboxSearch(event)" placeholder="Search..."/>
 				<div class="buttons">
-					<button onclick="SearchShowSearch()">Search</button>
-					<button class="inactive" onclick="SearchShowDownloaded()">
+					<button onclick="SearchTab('Search')" class="Search">Search</button>
+					<button class="Downloaded inactive" onclick="SearchTab('Downloaded')">
 						Downloaded
+					</button>
+					<button class="History inactive" onclick="SearchTab('History')">
+						History
 					</button>
 				</div>
 			</div>

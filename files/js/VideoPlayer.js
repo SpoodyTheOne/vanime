@@ -3,9 +3,13 @@ class VideoPlayer {
 	/** @type {HTMLVideoElement} */
 	//@ts-ignore
 	static video = document.getElementById("video-player");
+	/** @type {AnimeVideo} */
+	static currentVideo = null;
+
 	static IsPlaying = () => {
 		return !VideoPlayer.video.paused;
 	};
+
 	static Play = () => {
 		VideoPlayer.video.play();
 		let classes = PlayPauseButton.classList;
@@ -13,19 +17,24 @@ class VideoPlayer {
 		classes.remove("fa-play");
 		ControlsElement.classList.remove("hidden");
 	};
+
 	static Pause = () => {
 		VideoPlayer.video.pause();
 		let classes = PlayPauseButton.classList;
 		classes.remove("fa-pause");
 		classes.add("fa-play");
 	};
+
 	static Toggle = () => {
 		VideoPlayer.IsPlaying() ? VideoPlayer.Pause() : VideoPlayer.Play();
 	};
+
 	static SetVideo = (video, downloaded) => {
 		VideoPlayer.video.src = "";
 
 		VideoNameSpan.innerHTML = "Loading video...";
+
+		VideoPlayer.currentVideo = video;
 
 		if (downloaded)
 			return new Promise((resolve) => {
@@ -120,6 +129,10 @@ VideoPlayer.video.addEventListener("click", () => {
 
 VideoPlayer.video.addEventListener("durationchange", () => {
 	progress.max = VideoPlayer.video.duration.toString();
+
+	VideoPlayer.currentVideo.GetTimestamp().then((time) => {
+		VideoPlayer.video.currentTime = time;
+	});
 });
 
 VideoPlayer.video.addEventListener("loadeddata", () => {
@@ -188,12 +201,19 @@ VideoPlayer.video.addEventListener("timeupdate", () => {
 		!MouseOverControls
 	) {
 		ControlsElement.classList.add("hidden");
-		VideoPlayer.video.classList.add("hide-cursor")
+		VideoPlayer.video.classList.add("hide-cursor");
 	}
 });
 
 VideoPlayer.video.addEventListener("mousemove", () => {
 	ControlsElement.classList.remove("hidden");
-	VideoPlayer.video.classList.remove("hide-cursor")
+	VideoPlayer.video.classList.remove("hide-cursor");
 	VideoPlayer.LastInputTimestamp = VideoPlayer.video.currentTime;
 });
+
+//Save current video timestamp for next viewing;
+setInterval(() => {
+	if (VideoPlayer.currentVideo && VideoPlayer.IsPlaying()) {
+		VideoPlayer.currentVideo.SetTimestamp(VideoPlayer.video.currentTime);
+	}
+}, 5000);

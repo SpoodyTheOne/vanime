@@ -15,5 +15,35 @@ class AnimeVideo extends Video {
 
 			return download(this);
 		};
+
+		this.GetTimestamp = () => {
+			// @ts-check
+			return app.GetTimestamp(
+				{ name: this.anime.name },
+				this.season,
+				this.episode
+			);
+		};
+
+		this.SetTimestamp = (time) => {
+			// @ts-check
+			return app.SetTimestamp(
+				{ name: this.anime.name },
+				this.season,
+				this.episode,
+				time
+			);
+		};
 	}
+	
+	play(downloaded) {
+		super.play(downloaded);
+		//@ts-ignore
+		app.SetWatched(
+			{ name: this.anime.name },
+			this.season,
+			this.episode,
+			true
+		);
+	};
 }

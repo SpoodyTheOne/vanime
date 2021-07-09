@@ -1,3 +1,8 @@
+/**
+ * 
+ * @param {String} [str] The string to search for
+ * @returns {Promise<Anime[]>}
+ */
 function search(str) {
 	return app.Search(str).then((data) => {
 		return data.map((x) => {
@@ -53,9 +58,16 @@ function getDownloaded() {
 	});
 }
 
-function ResizeWindow(x,y)
-{
-	return app.ResizeWindow(x,y);
+function ResizeWindow(x, y) {
+	return app.ResizeWindow(x, y);
+}
+
+function GetWatchHistory() {
+	return app.GetWatched().then(data => {
+		data.map(x => {
+			//return new AnimeVideo(`${x.Anime} Season ${x.Season} Episode ${x.Episode}`)
+		});
+	})
 }
 
 let KeyHandler = (event) => {

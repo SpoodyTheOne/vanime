@@ -3,7 +3,7 @@ const fs = require("fs");
 const path = require("path");
 const { app } = require("electron");
 
-let data = {};
+let data = { Watchlist: [] };
 
 //structure of data inside watched.json
 /*
@@ -25,6 +25,13 @@ let data = {};
             }
         }
     }
+    "Watchlist": [
+        1: {
+            "anime":"anime-name",
+            "season":"1",
+            "episode":"1"
+        }
+    ]
 }
 
 */
@@ -45,7 +52,7 @@ module.exports.GetWatched = () => {
 	// 	});
 
 	return new Promise((Resolve, Reject) => {
-		Resolve(data);
+		Resolve(data.Watchlist);
 	});
 };
 
@@ -93,19 +100,21 @@ function _setData(anime, season, episode, watched, time) {
 	} else {
 		if (!data[anime]) {
 			data[anime] = { Seasons: {} };
-			_anime = data[anime];
 		}
 
+		_anime = data[anime];
+
 		if (!_anime.Seasons[season]) {
-			anime.Seasons[season] = { Episodes: {} };
-			_season = _anime.Seasons[season];
+			_anime.Seasons[season] = { Episodes: {} };
 		}
+
+		_season = _anime.Seasons[season];
 
 		if (!_season.Episodes[episode]) {
 			_season.Episodes[episode] = { Timestamp: time ? time : 0 };
 			_episode = _season.Episodes[episode];
 		} else if (time) {
-			_episode.Timestamp = time;
+			_season.Episodes[episode].Timestamp = time;
 		}
 	}
 }
@@ -136,6 +145,23 @@ module.exports.SetWatched = (Anime, Season, Episode, Watched) => {
 
 	return new Promise((Resolve, Reject) => {
 		_setData(Anime, Season, Episode, Watched);
+
+		let d = {
+			Anime: Anime,
+			Season: Season,
+			Episode: Episode,
+		};
+
+		let exists = data.Watchlist.indexOf(d);
+
+		if (exists != -1) {
+			data.Watchlist.splice(exists, 1);
+		}
+
+		data.Watchlist.unshift([d]);
+
+		if (data.Watchlist.length > 10) data.Watchlist.pop();
+
 		Resolve();
 	});
 };
@@ -171,17 +197,20 @@ module.exports.SetTimestamp = (Anime, Season, Episode, Time) => {
 };
 
 module.exports.init = () => {
-	return fs.promises.open(filePath, "w+").then((fh) => {
-		return fh.readFile({ encoding: "utf-8" }).then((raw) => {
-			try {
-				data = JSON.parse(raw);
-				fh.close();
-			} catch {
-				fh.writeFile("{}", { encoding: "utf-8" }).then(() => {
-					fh.close();
-				});
-			}
-		});
+	return new Promise((Resolve, Reject) => {
+		if (!fs.existsSync(filePath)) {
+			fs.writeFileSync(filePath, JSON.stringify(data), {
+				encoding: "utf-8",
+			});
+		}
+
+		Resolve(
+			fs.promises
+				.readFile(filePath, { encoding: "utf-8" })
+				.then((raw) => {
+					data = JSON.parse(raw);
+				})
+		);
 	});
 };
 

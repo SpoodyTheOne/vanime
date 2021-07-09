@@ -71,6 +71,40 @@ class app {
 			Episode: Episode,
 		});
 	};
+
+	/**
+	 * @param {String} [Anime] Name of the anime
+	 * @param {String} [Season] Season
+	 * @param {String} [Episode] Episode
+	 * @param {number} [Time] The time in seconds watched
+	 *
+	 * @return {Promise<void>} Resolves when finnished writing to disk.
+	 */
+	static SetTimestamp = (Anime, Season, Episode, Time) => {
+		return ipcRenderer.invoke("SetTimestamp", {
+			Anime: Anime,
+			Season: Season,
+			Episode: Episode,
+			Time: Time,
+		});
+	};
+
+	/**
+	 * @param {String} [Anime] Name of the anime
+	 * @param {String} [Season] Season
+	 * @param {String} [Episode] Episode
+	 * @param {boolean} [Watched] State to be set to
+	 *
+	 * @return {Promise<void>} Resolves when finnished writing to disk.
+	 */
+	static SetWatched = (Anime, Season, Episode, Watched) => {
+		return ipcRenderer.invoke("SetWatched", {
+			Anime: Anime,
+			Season: Season,
+			Episode: Episode,
+			Watched: Watched,
+		});
+	};
 }
 
 //@ts-ignore

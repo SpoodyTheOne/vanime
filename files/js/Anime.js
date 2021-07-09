@@ -22,4 +22,10 @@ class Anime {
 			});
 		};
 	}
+
+	static LoadFromName(name) {
+		search(name).then((data) => {
+			return data[0];
+		});
+	}
 }

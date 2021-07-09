@@ -110,19 +110,19 @@ ipcMain.handle("ResizeWindow", (event, size) => {
 
 ipcMain.handle("SetWatched", (event, data) => {
 	return Watched.SetWatched(
-		data.anime.name,
+		data.Anime.name,
 		data.Season,
-		data.episode,
-		data.watched
+		data.Episode,
+		data.Watched
 	);
 });
 
 ipcMain.handle("SetTimestamp", (event, data) => {
 	return Watched.SetTimestamp(
-		data.anime.name,
+		data.Anime.name,
 		data.Season,
-		data.episode,
-		data.time
+		data.Episode,
+		data.Time
 	);
 });
 
@@ -131,7 +131,7 @@ ipcMain.handle("GetWatched", (event, data) => {
 });
 
 ipcMain.handle("GetTimestamp", (event, data) => {
-	return Watched.GetTimetstamp(data.Anime.name, data.Season, data.episode);
+	return Watched.GetTimetstamp(data.Anime.name, data.Season, data.Episode);
 });
 
 app.on("before-quit", (event) => {

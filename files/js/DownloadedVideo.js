@@ -15,9 +15,7 @@ class DownloadedVideo extends AnimeVideo {
 
 		//tell VideoPlayer that his is a downloaded video when playing.
 		this.play = () => {
-			VideoPlayer.SetVideo(this, true).then(() => {
-				VideoPlayer.Play();
-			});
+			super.play(true);
 		};
 	}
 }
