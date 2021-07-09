@@ -4,11 +4,14 @@ const { app, BrowserWindow, ipcMain, Menu } = require("electron");
 require("dotenv").config();
 const Anime = require("./modules/requestAnime");
 const DownloadManager = require("./modules/downloadManager");
+const Watched = require("./modules/watchedManager");
 
 const path = require("path");
 
 /** @type {BrowserWindow} */
 let window = null;
+
+let ReadyToQuit = false;
 
 function CreateWindow() {
 	window = new BrowserWindow({
@@ -105,6 +108,47 @@ ipcMain.handle("ResizeWindow", (event, size) => {
 	window.setSize(size.width, size.height, true);
 });
 
+ipcMain.handle("SetWatched", (event, data) => {
+	return Watched.SetWatched(
+		data.anime.name,
+		data.Season,
+		data.episode,
+		data.watched
+	);
+});
+
+ipcMain.handle("SetTimestamp", (event, data) => {
+	return Watched.SetTimestamp(
+		data.anime.name,
+		data.Season,
+		data.episode,
+		data.time
+	);
+});
+
+ipcMain.handle("GetWatched", (event, data) => {
+	return Watched.GetWatched();
+});
+
+ipcMain.handle("GetTimestamp", (event, data) => {
+	return Watched.GetTimetstamp(data.Anime.name, data.Season, data.episode);
+});
+
+app.on("before-quit", (event) => {
+	if (!ReadyToQuit) {
+		event.preventDefault();
+
+		Watched.save().then(() => {
+			ReadyToQuit = true;
+			app.quit();
+		});
+
+		return false;
+	}
+});
+
 app.whenReady().then(() => {
-	CreateWindow();
+	Watched.init().then(() => {
+		CreateWindow();
+	});
 });

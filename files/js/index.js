@@ -51,6 +51,26 @@ class app {
 	static ResizeWindow = (x, y) => {
 		return ipcRenderer.invoke("ResizeWindow", { width: x, height: y });
 	};
+
+	static GetWatched = () => {
+		return ipcRenderer.invoke("GetWatched");
+	};
+
+	/**
+	 * @param {String} [Anime] Name of the anime
+	 * @param {String} [Season] Season
+	 * @param {String} [Episode] Episode
+	 *
+	 * @return {Promise<number>} Number of seconds into the video has been watched.
+	 * resolves 0 if not watched.
+	 */
+	static GetTimestamp = (Anime, Season, Episode) => {
+		return ipcRenderer.invoke("GetTimestamp", {
+			Anime: Anime,
+			Season: Season,
+			Episode: Episode,
+		});
+	};
 }
 
 //@ts-ignore
