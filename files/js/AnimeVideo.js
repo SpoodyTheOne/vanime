@@ -35,15 +35,21 @@ class AnimeVideo extends Video {
 			);
 		};
 	}
-	
+
+	get ipcSafe() {
+		return {
+			episode: this.episode,
+			season: this.season,
+			url: this.url,
+			anime: this.anime.ipcSafe,
+			name: this.name,
+			downloaded: this instanceof DownloadedVideo,
+		};
+	}
+
 	play(downloaded) {
 		super.play(downloaded);
 		//@ts-ignore
-		app.SetWatched(
-			{ name: this.anime.name },
-			this.season,
-			this.episode,
-			true
-		);
-	};
+		app.SetWatched(this.anime.ipcSafe, this.ipcSafe, true);
+	}
 }

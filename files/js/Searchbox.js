@@ -219,7 +219,7 @@ function drawSearchCanvas() {
 				15 * Math.abs(i - EpisodeIndex);
 
 			if (tab == "History") {
-				ctx.fillRect(x, y, width, height);
+				ctx.drawImage(Episode.anime.image, x, y, width, height);
 			} else {
 				if (IsDownloaded(Episode)) {
 					ctx.fillText("Downloaded", x + width / 2, y + height + 30);
@@ -352,9 +352,13 @@ function SearchTab(newTab) {
 			break;
 
 		case "History":
-            GetWatchHistory().then((watched) => {
-                
-            })
+			Loading = true;
+			GetWatchHistory().then((watched) => {
+				EpisodeList = watched;
+				ShowingEpisodes = true;
+				EpisodeIndex = 0;
+				Loading = false;
+			});
 			break;
 	}
 }
@@ -364,6 +368,16 @@ function IsDownloaded(video) {
 		?.episodes[video?.episode]
 		? true
 		: false;
+}
+
+function SearchButtonPressed() {
+	if (tab != "History")
+		Searching
+			? ShowingEpisodes
+				? (ShowingEpisodes = false)
+				: CloseSearch()
+			: OpenSearch();
+	else Searching ? CloseSearch() : OpenSearch();
 }
 
 SearchWindowResize();

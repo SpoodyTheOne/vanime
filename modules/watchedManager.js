@@ -19,7 +19,7 @@ let data = { Watchlist: [] };
                 Episodes: {
                     "1": {
                         //Timestamp in seconds
-                        "Timestamp": 0
+                        "Timestamp": 0,
                     }
                 }
             }
@@ -29,7 +29,13 @@ let data = { Watchlist: [] };
         1: {
             "anime":"anime-name",
             "season":"1",
-            "episode":"1"
+            "episode":"1",
+			"Url": "url",
+			"Anime": {
+				"Name": "anime-name",
+				"Url": "anime-url",
+				"Image": "image-url"
+			}
         }
     ]
 }
@@ -121,13 +127,12 @@ function _setData(anime, season, episode, watched, time) {
 
 /**
  * @param {String} [Anime] Name of the anime
- * @param {String} [Season] Season
- * @param {String} [Episode] Episode
+ * @param {Object} [Video] Video
  * @param {boolean} [Watched] State to be set to
  *
  * @return {Promise<void>} Resolves when finnished writing to disk.
  */
-module.exports.SetWatched = (Anime, Season, Episode, Watched) => {
+module.exports.SetWatched = (Anime, Video, Watched) => {
 	// return fs.promises.open(filePath, "w+").then((file) => {
 	// 	return file.readFile({ encoding: "utf-8" }).then((raw) => {
 	// 		//if the file is newly created.
@@ -144,21 +149,26 @@ module.exports.SetWatched = (Anime, Season, Episode, Watched) => {
 	// });
 
 	return new Promise((Resolve, Reject) => {
-		_setData(Anime, Season, Episode, Watched);
+		_setData(Anime, Video.season, Video.episode, Watched);
 
 		let d = {
 			Anime: Anime,
-			Season: Season,
-			Episode: Episode,
+			Season: Video.season,
+			Episode: Video.episode,
+			Url: Video.url,
+			Name: Video.name,
+			Downloaded: Video.downloaded
 		};
 
-		let exists = data.Watchlist.indexOf(d);
+		let exists = data.Watchlist.map((x) => {
+			return x.Name;
+		}).indexOf(Video.name);
 
 		if (exists != -1) {
 			data.Watchlist.splice(exists, 1);
 		}
 
-		data.Watchlist.unshift([d]);
+		data.Watchlist.unshift(d);
 
 		if (data.Watchlist.length > 10) data.Watchlist.pop();
 

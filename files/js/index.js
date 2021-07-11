@@ -91,17 +91,15 @@ class app {
 
 	/**
 	 * @param {String} [Anime] Name of the anime
-	 * @param {String} [Season] Season
-	 * @param {String} [Episode] Episode
+	 * @param {AnimeVideo} [Video] Video object
 	 * @param {boolean} [Watched] State to be set to
 	 *
 	 * @return {Promise<void>} Resolves when finnished writing to disk.
 	 */
-	static SetWatched = (Anime, Season, Episode, Watched) => {
+	static SetWatched = (Anime, Video, Watched) => {
 		return ipcRenderer.invoke("SetWatched", {
 			Anime: Anime,
-			Season: Season,
-			Episode: Episode,
+			Video: Video,
 			Watched: Watched,
 		});
 	};

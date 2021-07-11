@@ -2,7 +2,7 @@
 class Video {
 	constructor(name, url) {
 		this.name = name;
-		this.url = url;
+		this._url = url;
 
 		this.GetName = () => {
 			return this.name.split("Season").shift().split("Episode").shift();
@@ -10,6 +10,10 @@ class Video {
 
 		//random id so i can compare videos across classes
 		this.id = Math.random();
+	}
+
+	get url() {
+		return this._url;
 	}
 
 	play(downloaded) {

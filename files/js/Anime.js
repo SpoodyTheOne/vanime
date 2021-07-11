@@ -23,6 +23,14 @@ class Anime {
 		};
 	}
 
+	get ipcSafe() {
+		return {
+			name: this.name,
+			url: this.url,
+			image: this.image.src,
+		};
+	}
+
 	static LoadFromName(name) {
 		search(name).then((data) => {
 			return data[0];

@@ -1,5 +1,5 @@
 /**
- * 
+ *
  * @param {String} [str] The string to search for
  * @returns {Promise<Anime[]>}
  */
@@ -63,11 +63,34 @@ function ResizeWindow(x, y) {
 }
 
 function GetWatchHistory() {
-	return app.GetWatched().then(data => {
-		data.map(x => {
-			//return new AnimeVideo(`${x.Anime} Season ${x.Season} Episode ${x.Episode}`)
+	return app.GetWatched().then((data) => {
+		return data.map((x) => {
+			//console.log(x);
+			let anime = new Anime(x.Anime.name, x.Anime.url, x.Anime.image);
+			let video = null;
+			if (!x.Downloaded) {
+				video = new AnimeVideo(
+					x.Name,
+					x.Url,
+					x.Episode,
+					x.Season,
+					false,
+					false
+				);
+			} else {
+				video = new DownloadedVideo(
+					x.Name,
+					x.Url,
+					x.Episode,
+					x.Season,
+					false,
+					false
+				);
+			}
+			video.anime = anime;
+			return video;
 		});
-	})
+	});
 }
 
 let KeyHandler = (event) => {

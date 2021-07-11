@@ -109,12 +109,7 @@ ipcMain.handle("ResizeWindow", (event, size) => {
 });
 
 ipcMain.handle("SetWatched", (event, data) => {
-	return Watched.SetWatched(
-		data.Anime.name,
-		data.Season,
-		data.Episode,
-		data.Watched
-	);
+	return Watched.SetWatched(data.Anime, data.Video);
 });
 
 ipcMain.handle("SetTimestamp", (event, data) => {
