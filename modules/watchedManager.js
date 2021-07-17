@@ -161,8 +161,8 @@ module.exports.SetWatched = (Anime, Video, Watched) => {
 		};
 
 		let exists = data.Watchlist.map((x) => {
-			return x.Name;
-		}).indexOf(Video.name);
+			return x.Anime.name;
+		}).indexOf(Video.anime.name);
 
 		if (exists != -1) {
 			data.Watchlist.splice(exists, 1);
