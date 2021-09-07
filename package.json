@@ -25,6 +25,7 @@
 		"icon": "./icons/icon.png",
 		"extraFiles": [
 			".env"
-		]
+		],	
+		"asarUnpack": "node_modules/puppeteer/.local-chromium/**/*"
 	}
 }

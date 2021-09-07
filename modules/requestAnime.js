@@ -152,13 +152,14 @@ function getEpisodeVideo(url) {
 
 puppeteer
 	.launch({
-		executablePath: process.env.CHROME_PATH_WINDOWS,
+		executablePath: "./node_modules/puppeteer/.local-chromium/linux-884014/chrome-linux/chrome",
 		headless: true,
 		timeout: 60000,
 	})
 	.then((browser) => {
 		Browser = browser;
 		browser.pages().then((pages) => {
+			console.log(pages);
 			Pages.search = pages[0];
 			Pages.search.goto("http://thewatchcartoononline.tv/search");
 		});
