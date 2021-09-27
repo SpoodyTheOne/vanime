@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="UTF-8" />
+		<!-- https://developer.mozilla.org/en-US/docs/Web/HTTP/CSP -->
+		<meta
+			http-equiv="Content-Security-Policy"
+			content="default-src 'self'; script-src 'self'; img-src 'self' https://cdn.animationexplore.com/"
+		/>
+		<meta
+			http-equiv="X-Content-Security-Policy"
+			content="default-src 'self'; script-src 'self'; img-src 'self' https://cdn.animationexplore.com/"
+		/>
+
+		<link rel="stylesheet" href="./css/index.css" />
+		<link rel="stylesheet" href="./css/show.css" />
+		<link rel="stylesheet" href="./css/loader.css" />
+
+		<title>Vanime Video Streamer</title>
+	</head>
+	<body>
+		<div id="featured">
+			<img alt="FEATURED_IMAGE" />
+			<div class="text">
+				<h1 class="title">FEATURED_TITLE</h1>
+				<pre class="description">FEATURED_DESCRIPTION</pre>
+			</div>
+		</div>
+		
+		<h1>Recent releases</h1>
+		<div id="shows">
+			<div class="show">
+				<img alt="SHOW_IMAGE">
+				<div class="info">
+					<h2>SHOW_NAME</h2>
+					<pre>SHOW_DESCRIPTION</pre>
+				</div>
+			</div>
+		</div>
+
+		<div id="loader">
+			<div class="spinny-container">
+				<div class="spinny"></div>
+			</div>
+		</div>
+
+		<script src="./src/loader.js"></script>
+		<script src="./src/wcofun.js"></script>
+		<script src="./src/anime.js"></script>
+		<script src="./src/index.js"></script>
+	</body>
+</html>

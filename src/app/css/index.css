@@ -1,0 +1,21 @@
+* {
+	font-family: Arial, Helvetica, sans-serif;
+	color: white;
+	margin: 0px;
+	font-size: 3vh;
+}
+
+h1 {
+	font-size: 6vh;
+}
+
+body {
+	background: linear-gradient(#363a3f, #2c3035);
+	background-attachment: fixed;
+	height: 100vh;
+	margin: 4px;
+}
+
+body::-webkit-scrollbar {
+	display: none;
+}
