@@ -19,3 +19,10 @@ body {
 body::-webkit-scrollbar {
 	display: none;
 }
+
+button {
+	border:none;
+	background:none;
+	cursor: pointer;
+	padding:none;
+}

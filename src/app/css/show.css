@@ -76,9 +76,6 @@
 	white-space: pre-wrap;
 }
 
-#shows .show:hover {
-}
-
-#shows .show:hover .info {
+.show:hover .info {
 	width: 55vh;
 }

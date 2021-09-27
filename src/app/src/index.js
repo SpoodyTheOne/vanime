@@ -9,8 +9,12 @@
 	featured.querySelector(".text .title").innerText = anime.Name;
 	featured.querySelector(".text .description").innerText = anime.Description;
 
+	featured.addEventListener("click", () => {
+		ShowPage.ShowAnime(anime);
+	});
+
 	//get recently added episodes
-	let recent = await Wcofun.GetRecentReleases();
+	let recent = []//await Wcofun.GetRecentReleases();
 
 	//get template element and parent
 	let shows = document.querySelector("#shows");
@@ -34,6 +38,11 @@
 		elements.push(show);
 	}
 
+	VideoPlayer.init(document.getElementById("video-player"));
+
+	//hide show episode selector
+	ShowPage.ShowInfoElement.style.display = "none";
+
 	//hide loading screen
 	Loader.Hide();
 
@@ -42,15 +51,16 @@
 	for (let episode of recent) {
 		let show = elements[i];
 
-		let recent = await episode.GetAnime();
+		episode.GetAnime().then((recent) => {
+			show.children[0].src = recent.Image;
+			show.children[1].children[0].innerText = recent.Name;
+			show.children[1].children[1].innerText = recent.Description;
 
-		show.children[0].src = recent.Image;
-		show.children[1].children[0].innerText = recent.Name;
-		show.children[1].children[1].innerText = recent.Description;
-
-		//add event listener for viewing
-		show.addEventListener("click", () => {
-			alert("View show " + recent.Url);
+			//add event listener for viewing
+			show.addEventListener("click", () => {
+				console.log("Showing anime");
+				ShowPage.ShowAnime(recent);
+			});
 		});
 
 		i++;

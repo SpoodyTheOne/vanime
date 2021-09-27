@@ -53,4 +53,12 @@ class Wcofun {
 			return anime;
 		});
 	};
+
+	/**
+	 * Gets the video url of this episode
+	 * @param {Episode} episode
+	 */
+	static GetEpisodeUrl = (episode) => {
+		return window.API.GetEpisodeUrl(episode.PageUrl);
+	};
 }

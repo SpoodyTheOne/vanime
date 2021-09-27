@@ -145,6 +145,13 @@ class Episode {
 	 * The url of the video for this episode
 	 */
 	get EpisodeUrl() {
-		return Wcofun.Instance.GetEpisodeUrl(this.PageUrl);
+		return Wcofun.GetEpisodeUrl(this);
+	}
+
+	/**
+	 * The index of this episode in the season
+	 */
+	get EpisodeIndex() {
+		return parseInt(this.Name.match(/episode [1-9]+/gi)[0].substring(8));
 	}
 }

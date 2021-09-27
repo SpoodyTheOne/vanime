@@ -5,16 +5,18 @@
 		<!-- https://developer.mozilla.org/en-US/docs/Web/HTTP/CSP -->
 		<meta
 			http-equiv="Content-Security-Policy"
-			content="default-src 'self'; script-src 'self'; img-src 'self' https://cdn.animationexplore.com/"
+			content="default-src 'self'; script-src 'self'; img-src 'self' https://cdn.animationexplore.com/; media-src *"
 		/>
 		<meta
 			http-equiv="X-Content-Security-Policy"
-			content="default-src 'self'; script-src 'self'; img-src 'self' https://cdn.animationexplore.com/"
+			content="default-src 'self'; script-src 'self'; img-src 'self' https://cdn.animationexplore.com/; media-src *"
 		/>
 
 		<link rel="stylesheet" href="./css/index.css" />
 		<link rel="stylesheet" href="./css/show.css" />
 		<link rel="stylesheet" href="./css/loader.css" />
+		<link rel="stylesheet" href="./css/showInfo.css" />
+		<link rel="stylesheet" href="./css/video.css" />
 
 		<title>Vanime Video Streamer</title>
 	</head>
@@ -38,6 +40,25 @@
 			</div>
 		</div>
 
+		<div id="show-info" class="hidden">
+			<div class="image">
+				<button>Back</button>
+				<h1>SHOW_NAME</h1>
+				<pre>SHOW_DESCRIPTION</pre>
+			</div>
+			<select id="season-select">
+				<option value="0">Season 1</option>
+			</select>
+			<ul class="episodes">
+
+			</ul>
+		</div>
+
+		<div id="video-player">
+			<video src="../../traps.mp4">
+			</video>
+		</div>
+
 		<div id="loader">
 			<div class="spinny-container">
 				<div class="spinny"></div>
@@ -47,6 +68,8 @@
 		<script src="./src/loader.js"></script>
 		<script src="./src/wcofun.js"></script>
 		<script src="./src/anime.js"></script>
+		<script src="./src/videoplayer.js"></script>
+		<script src="./src/showPage.js"></script>
 		<script src="./src/index.js"></script>
 	</body>
 </html>

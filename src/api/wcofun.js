@@ -7,10 +7,10 @@ class Wcofun {
 	static Instance = null;
 
 	constructor(options = {}) {
-		/** @type {Puppeteer.Page} */
-		this.WorkerPage = null;
 		/** @type {Puppeteer.Browser} */
 		this.Browser = null;
+
+		this.WorkerPages = {};
 
 		this.options = options;
 
@@ -23,16 +23,14 @@ class Wcofun {
 
 			await Puppeteer.launch(this.options).then((browser) => {
 				this.Browser = browser;
-
-				return this.Browser.pages().then((pages) => {
-					this.WorkerPage = pages[0];
-				});
 			});
 		};
 
-		this.RemoveAds = () => {
-			return this.WorkerPage.waitForSelector(".vdo_stories_floating").then(() => {
-				this.WorkerPage.evaluate(`document.querySelector(".vdo_stories_floating").remove()`);
+		this.RemoveAds = (Page) => {
+			if (Page == null) return console.log("Cant remove ads of null");
+
+			return Page.waitForSelector(".vdo_stories_floating").then(() => {
+				Page.evaluate(`document.querySelector(".vdo_stories_floating").remove()`);
 			});
 		};
 
@@ -40,10 +38,11 @@ class Wcofun {
 		 * @returns {Promise<Anime>} The currently featured anime
 		 */
 		this.GetFeatured = async () => {
-			this.WorkerPage.goto("http://wcofun.com");
-			await this.RemoveAds();
-			await this.WorkerPage.waitForSelector("#sidebar_today");
-			const data = await this.WorkerPage.$eval("#sidebar_today", (element) => {
+			let page = await this.CreateWorkerPage();
+			page.goto("http://wcofun.com");
+			await this.RemoveAds(page);
+			await page.waitForSelector("#sidebar_today");
+			const data = await page.$eval("#sidebar_today", (element) => {
 				let url = element.children[1].href;
 				let image = element.children[1].children[0].src;
 				let description = element.children[3].innerText;
@@ -52,6 +51,7 @@ class Wcofun {
 
 				return { url: url, image: image, name: name, description: description };
 			});
+			page.close();
 			return data;
 		};
 
@@ -59,10 +59,11 @@ class Wcofun {
 		 * @returns {Promise<Episode[]>}
 		 */
 		this.GetRecentReleases = async () => {
-			this.WorkerPage.goto("http://wcofun.com/");
-			await this.RemoveAds();
-			await this.WorkerPage.waitForSelector(".recent-release-main #sidebar_right");
-			let data = this.WorkerPage.$$eval(".recent-release-main #sidebar_right .items li", (elements) => {
+			let page = await this.CreateWorkerPage();
+			page.goto("http://wcofun.com");
+			//await this.RemoveAds(page);
+			await page.waitForSelector(".recent-release-main #sidebar_right");
+			let data = await page.$$eval(".recent-release-main #sidebar_right .items li", (elements) => {
 				return elements.map((x) => {
 					return {
 						image: x.children[0].children[0].children[0].src,
@@ -71,6 +72,7 @@ class Wcofun {
 					};
 				});
 			});
+			page.close();
 			return data;
 		};
 
@@ -78,27 +80,29 @@ class Wcofun {
 		 * @param {String} Url
 		 * @returns {Promise<Episode[]>} The episodes of this anime
 		 */
-		this.GetEpisodes = (Url) => {
+		this.GetEpisodes = async (Url) => {
 			return new Promise(async (resolve, reject) => {
-				this.WorkerPage.goto(Url);
-				await this.RemoveAds();
-				let data = await this.WorkerPage.$$eval("#sidebar_right3 .cat-eps", (elements) => {
+				let page = await this.CreateWorkerPage();
+				page.goto(Url);
+				await this.RemoveAds(page);
+				let data = await page.$$eval("#sidebar_right3 .cat-eps", (elements) => {
 					return elements.map((x) => {
 						return { name: x.children[0].innerHTML, url: x.children[0].href };
 					});
 				});
-
 				resolve(data);
+				page.close();
 			});
 		};
 
 		this.EpisodeGetAnime = async (url) => {
-			this.WorkerPage.goto(url);
-			await this.RemoveAds();
-            await this.WorkerPage.waitForSelector(".header-tag h2")
-			this.WorkerPage.click(".header-tag h2");
-			await this.WorkerPage.waitForNavigation();
-			return this.WorkerPage.evaluate(() => {
+			let page = await this.CreateWorkerPage();
+			page.goto(url);
+			await this.RemoveAds(page);
+			await page.waitForSelector(".header-tag h2");
+			page.click(".header-tag h2");
+			await page.waitForNavigation();
+			let data = await page.evaluate(() => {
 				let title = document.querySelector(".video-title .h1-tag a");
 				let name = title.innerText;
 				let url = title.href;
@@ -109,6 +113,8 @@ class Wcofun {
 
 				return { name: name, url: url, description: description, image: image };
 			});
+			page.close();
+			return data;
 		};
 
 		/**
@@ -116,14 +122,66 @@ class Wcofun {
 		 * @param {Url} Url
 		 * @returns {Promise<String>}
 		 */
-		this.GetImage = (Url) => {
-			return this.WorkerPage.goto(Url).then(async () => {
-				await this.RemoveAds();
-				await this.WorkerPage.waitForSelector("#sidebar_cat .img5");
-				return this.WorkerPage.$eval("#sidebar_cat .img5", (element) => {
+		this.GetImage = async (Url) => {
+			let page = await this.CreateWorkerPage();
+			return page.goto(Url).then(async () => {
+				//await this.RemoveAds(page);
+				await page.waitForSelector("#sidebar_cat .img5");
+				return page.$eval("#sidebar_cat .img5", (element) => {
 					return element.src;
 				});
 			});
+		};
+
+		this.GetEpisodeUrl = async (url) => {
+			return new Promise(async (resolve) => {
+				let page = await this.CreateWorkerPage();
+				await page.goto(url);
+				await this.RemoveAds(page);
+				let frame = await page.$("#cizgi-js-0");
+
+				let content = await frame.contentFrame();
+
+				page.on("request", (req) => {
+					let url = req.url().split("?")[0];
+					if (url.match(/disk[1-9]+.cizgifilmlerizle.com/gi) || url.match(/disk.cizgifilmlerizle.com/gi)) {
+						page.close();
+						resolve(req.url());
+					}
+				});
+
+				//click chromecast player button
+				await content.click("a");
+
+				await content.waitForSelector("#myJwVideo_display_button");
+
+				await content.click("#myJwVideo_display_button");
+
+				await content.waitForTimeout(500);
+
+				let src = await (await content.waitForSelector("video")).getProperty("src");
+			});
+		};
+
+		this.CreateWorkerPage = async () => {
+			if (Object.entries(this.WorkerPages).length > 6)
+				await new Promise(function (resolve, reject) {
+					(function waitForFoo() {
+						if (Object.entries(Wcofun.Instance.WorkerPages).length < 7) return resolve();
+						setTimeout(waitForFoo, 300);
+					})();
+				});
+
+			let id = Math.random();
+			this.WorkerPages[id] = id;
+
+			let page = await this.Browser.newPage();
+			page.once("close", () => {
+				delete this.WorkerPages[id];
+			});
+
+			this.WorkerPages[id] = page;
+			return page;
 		};
 	}
 }
