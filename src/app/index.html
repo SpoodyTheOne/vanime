@@ -17,10 +17,23 @@
 		<link rel="stylesheet" href="./css/loader.css" />
 		<link rel="stylesheet" href="./css/showInfo.css" />
 		<link rel="stylesheet" href="./css/video.css" />
+		<link rel="stylesheet" href="./css/sidebar.css" />
+		<link rel="stylesheet" href="./css/search.css" />
+
+		<link rel="stylesheet" href="../../node_modules/@fortawesome/fontawesome-free/css/all.css" />
+
+		<!--
+			<script defer src="../../node_modules/@fortawesome/fontawesome-free/js/all.min.js"></script>
+		-->
 
 		<title>Vanime Video Streamer</title>
 	</head>
 	<body>
+		<div id="side-bar">
+			<i class="fas fa-home"></i>
+			<i class="fas fa-search"></i>
+		</div>
+
 		<div id="featured">
 			<img alt="FEATURED_IMAGE" />
 			<div class="text">
@@ -28,15 +41,47 @@
 				<pre class="description">FEATURED_DESCRIPTION</pre>
 			</div>
 		</div>
-		
+
 		<h1>Recent releases</h1>
-		<div id="shows">
-			<div class="show">
-				<img alt="SHOW_IMAGE">
+		<div id="recent-releases" class="shows">
+			<div class="show loading">
+				<img alt="SHOW_IMAGE" />
 				<div class="info">
 					<h2>SHOW_NAME</h2>
 					<pre>SHOW_DESCRIPTION</pre>
 				</div>
+			</div>
+		</div>
+
+		<h1>History</h1>
+		<div id="history" class="shows">
+			<div class="show loading">
+				<img alt="SHOW_IMAGE" />
+				<div class="info">
+					<h2>SHOW_NAME</h2>
+					<pre>SHOW_DESCRIPTION</pre>
+				</div>
+			</div>
+		</div>
+
+		<div id="search-page">
+			<div class="info">
+				<input class="search-box" />
+				<div>
+					<img alt="show image"> <i class="far fa-play-circle"></i>
+					<h1>Title</h1>
+					<pre>Description</pre>
+				</div>
+			</div>
+
+			<div class="list">
+				<img class="searched-show" alt="show image" src="https://cdn.animationexplore.com/catimg/167034.jpg"/>
+				<img class="searched-show" alt="show image" src="https://cdn.animationexplore.com/catimg/167034.jpg"/>
+				<img class="searched-show" alt="show image" src="https://cdn.animationexplore.com/catimg/167034.jpg"/>
+				<img class="searched-show" alt="show image" src="https://cdn.animationexplore.com/catimg/167034.jpg"/>
+				<img class="searched-show" alt="show image" src="https://cdn.animationexplore.com/catimg/167034.jpg"/>
+				<img class="searched-show" alt="show image" src="https://cdn.animationexplore.com/catimg/167034.jpg"/>
+				<img class="searched-show" alt="show image" src="https://cdn.animationexplore.com/catimg/167034.jpg"/>
 			</div>
 		</div>
 
@@ -49,14 +94,17 @@
 			<select id="season-select">
 				<option value="0">Season 1</option>
 			</select>
-			<ul class="episodes">
-
-			</ul>
+			<ul class="episodes"></ul>
 		</div>
 
 		<div id="video-player">
-			<video src="../../traps.mp4">
-			</video>
+			<video src="../../traps.mp4" id="video-element"></video>
+			<div id="video-controls"></div>
+			<div id="video-info">
+				<button>Back</button>
+				<h1 class="episode-name"></h1>
+				<pre class="anime-description"></pre>
+			</div>
 		</div>
 
 		<div id="loader">
@@ -70,6 +118,7 @@
 		<script src="./src/anime.js"></script>
 		<script src="./src/videoplayer.js"></script>
 		<script src="./src/showPage.js"></script>
+		<script src="./src/searchbar.js"></script>
 		<script src="./src/index.js"></script>
 	</body>
 </html>

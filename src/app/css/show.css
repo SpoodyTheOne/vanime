@@ -4,6 +4,8 @@
 	display: flex;
 	flex-wrap: wrap;
 	margin-bottom: 20px;
+
+	cursor:pointer;
 }
 
 #featured img {
@@ -20,19 +22,23 @@
 	white-space: pre-wrap;
 }
 
-#shows {
+.shows {
 	margin-top: 10px;
 	display: flex;
 	overflow-x: auto;
 	overflow-y: hidden;
 }
 
-#shows::-webkit-scrollbar {
+.shows::-webkit-scrollbar {
 	display: none;
 }
 
-#shows .show:first-child {
+.shows .show:first-child {
 	display: none;
+}
+
+.show.loading {
+	cursor:inherit;
 }
 
 .show {
@@ -52,6 +58,8 @@
 	flex-shrink: 0;
 
 	margin: 4px;
+
+	cursor:pointer;
 }
 
 .show .info {

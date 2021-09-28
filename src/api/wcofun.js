@@ -133,18 +133,43 @@ class Wcofun {
 			});
 		};
 
+		/**
+		 * Searches for anime
+		 * @param {String} string
+		 */
+		this.Search = async (string) => {
+			let page = await this.CreateWorkerPage();
+			await page.goto("https://wcofun.com/search");
+			await this.RemoveAds(page);
+			await page.type("#konuara .catara2", string);
+			await page.click(".aramabutonu2.button1");
+			await page.waitForNavigation();
+			let data = await page.$$eval(".items li", (elements) => {
+				return elements.map((x) => {
+					let Image = x.querySelector(".img a");
+					let Url = Image.href;
+					let ImageUrl = Image.querySelector("img").src;
+					let Name = x.querySelector(".recent-release-episodes").innerText;
+
+					return { image: ImageUrl, url: Url, name: Name };
+				});
+			});
+			page.close();
+			return data;
+		};
+
 		this.GetEpisodeUrl = async (url) => {
 			return new Promise(async (resolve) => {
 				let page = await this.CreateWorkerPage();
 				await page.goto(url);
 				await this.RemoveAds(page);
-				let frame = await page.$("#cizgi-js-0");
+				let frame = await page.$("#cizgi-js-0, #anime-js-0");
 
 				let content = await frame.contentFrame();
 
 				page.on("request", (req) => {
 					let url = req.url().split("?")[0];
-					if (url.match(/disk[1-9]+.cizgifilmlerizle.com/gi) || url.match(/disk.cizgifilmlerizle.com/gi)) {
+					if (url.endsWith(".mp4")) {
 						page.close();
 						resolve(req.url());
 					}

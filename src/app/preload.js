@@ -16,4 +16,7 @@ window.API = {
 	GetEpisodeUrl: (Url) => {
 		return ipcRenderer.invoke("Wco.GetEpisodeUrl", Url);
 	},
+	Search: (string) => {
+		return ipcRenderer.invoke("Wco.Search",string);
+	}
 };

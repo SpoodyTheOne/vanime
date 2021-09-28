@@ -55,6 +55,21 @@ class Wcofun {
 	};
 
 	/**
+	 * Search for anime
+	 * @param {String} string
+	 */
+	static Search = async (string) => {
+		let data = await window.API.Search(string);
+
+		return data.map((x) => {
+			let anime = new Anime(x.url);
+			anime.Name = x.name;
+			anime.Image = x.image;
+			return anime;
+		});
+	};
+
+	/**
 	 * Gets the video url of this episode
 	 * @param {Episode} episode
 	 */

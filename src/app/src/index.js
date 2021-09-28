@@ -13,12 +13,20 @@
 		ShowPage.ShowAnime(anime);
 	});
 
+	let sidebar = document.getElementById("side-bar");
+
+	sidebar.querySelector(".fa-home").addEventListener("click", () => {
+		Searchbar.Hide();
+	});
+
+	Searchbar.init(document.getElementById("search-page"), sidebar.querySelector(".fa-search"));
+
 	//get recently added episodes
-	let recent = []//await Wcofun.GetRecentReleases();
+	let recent = await Wcofun.GetRecentReleases();
 
 	//get template element and parent
-	let shows = document.querySelector("#shows");
-	let template = document.querySelector("#shows .show:first-child");
+	let shows = document.querySelector("#recent-releases");
+	let template = document.querySelector("#recent-releases .show:first-child");
 
 	//array for saving show elements
 	let elements = [];
@@ -55,6 +63,7 @@
 			show.children[0].src = recent.Image;
 			show.children[1].children[0].innerText = recent.Name;
 			show.children[1].children[1].innerText = recent.Description;
+			show.classList.remove("loading");
 
 			//add event listener for viewing
 			show.addEventListener("click", () => {

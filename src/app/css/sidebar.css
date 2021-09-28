@@ -1,0 +1,16 @@
+#side-bar {
+	position: fixed;
+	left: 0;
+	top: 0;
+	bottom: 0;
+	width: 4vh;
+
+	background-color: #292a30;
+
+	padding: 2vh;
+}
+
+#side-bar i {
+	cursor: pointer;
+	margin-bottom:4vh;
+}

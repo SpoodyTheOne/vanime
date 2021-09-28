@@ -8,21 +8,23 @@ function CreateWindow() {
 	Window = new BrowserWindow({
 		width: 800,
 		height: 600,
+		minHeight: 600,
+		minWidth: 800,
 		webPreferences: {
 			contextIsolation: false,
 			preload: __dirname + "/src/app/preload.js",
 			nativeWindowOpen: true,
-		}
+		},
 	});
 
 	let menu = Menu.buildFromTemplate([
 		{
 			accelerator: "ctrl+r",
-			role: "reload"
-		},		
+			role: "reload",
+		},
 		{
 			accelerator: "ctrl+shift+i",
-			role: "toggleDevTools"
+			role: "toggleDevTools",
 		},
 	]);
 
@@ -53,6 +55,10 @@ ipcMain.handle("Wco.GetEpisodeUrl", (event, url) => {
 	return Wcofun.Instance.GetEpisodeUrl(url);
 });
 
+ipcMain.handle("Wco.Search", (event, string) => {
+	return Wcofun.Instance.Search(string);
+});
+
 app.whenReady().then(() => {
 	new Wcofun({
 		headless: true,
@@ -62,7 +68,7 @@ app.whenReady().then(() => {
 			"--disable-backgrounding-occluded-windows",
 			"--disable-renderer-backgrounding",
 		],
-		executablePath: __dirname + "/chromium/chrome"
+		executablePath: __dirname + "/chromium/chrome",
 	})
 		.init()
 		.then(() => {
