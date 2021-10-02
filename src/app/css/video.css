@@ -28,7 +28,7 @@
 	right: 0;
 
 	padding: 1vh;
-	margin-left: 1vh;
+	padding-left: 2vh;
 
 	background-color: #1816169c;
 	backdrop-filter: blur(5px);
@@ -39,6 +39,7 @@
 
 #video-player #video-info.hidden {
 	opacity: 0;
+	pointer-events: none;
 }
 
 #video-player #video-info .episode-name {
@@ -50,4 +51,37 @@
 	margin-top: 2vh;
 	white-space: pre-wrap;
 	max-width: 80%;
+}
+
+#video-player #video-controls {
+	height: 15vh;
+	position: fixed;
+	bottom: 0px;
+	left: 0px;
+	right: 0px;
+	background-color: #363644;
+}
+
+#video-controls .progress-container {
+	width: 100%;
+	height: 1.5vh;
+	background-color: #22222c;
+	position: relative;
+}
+
+#video-controls .progress-container div {
+	height: 100%;
+	position: absolute;
+	left: 0px;
+	top: 0px;
+}
+
+#video-controls .progress-container .progress {
+	background-color: #e74c3c;
+	width: 25%;
+}
+
+#video-controls .progress-container .buffered {
+	background-color: #464646;
+	width: 45%;
 }

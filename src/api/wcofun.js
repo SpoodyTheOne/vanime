@@ -192,7 +192,7 @@ class Wcofun {
 			let page = await this.CreateWorkerPage();
 			page.goto(url);
 			await page.waitForNavigation();
-			await this.RemoveAds();
+			//await this.RemoveAds(page);
 			let data = await page.$eval("#sidebar_cat p", (element) => {
 				return element.innerText;
 			});

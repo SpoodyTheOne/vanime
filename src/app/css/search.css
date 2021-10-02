@@ -17,12 +17,13 @@
 
 #search-page.hidden {
 	opacity: 0;
+	pointer-events: none;
 }
 
 #search-page .search-box {
 	background: #27282e3b;
 	color: #eee;
-	border: 2px solid #27282e;
+	border: 0.2vh solid #27282e;
 	border-radius: 5px;
 	outline: none;
 
@@ -34,7 +35,7 @@
 #search-page .info {
 	width: 50%;
 
-	border-right: 2px solid #27282e;
+	border-right: 0.2vh solid #27282e;
 	margin-right: 4vh;
 	overflow-y: auto;
 }
@@ -67,5 +68,39 @@
 
 #search-page .list .searched-show {
 	width: 32%;
-	margin: 0.2vh;
+	margin: 0.1vh 0.3vh;
+	cursor: pointer;
+	border-radius: 5px;
+	transition: filter 0.1s ease;
+}
+
+#search-page .list .searched-show.active {
+	border: 2px solid #eee;
+	margin: calc(0.1vh - 2px) calc(0.3vh - 2px);
+}
+
+#search-page .list .searched-show:hover {
+	filter: brightness(125%);
+}
+
+#search-page .tooltip {
+	position: fixed;
+	top: 100%;
+	left: 1px;
+	background-color: #2a2835;
+	border: 0.25vh solid #333141;
+	padding: 1vh;
+	border-radius: 5px;
+	width: fit-content;
+	opacity: 0;
+	transition: opacity 0.1s ease;
+	pointer-events: none;
+}
+
+#search-page .tooltip.active {
+	opacity: 1;
+}
+
+#search-page .tooltip h2 {
+	font-size: 2vh;
 }

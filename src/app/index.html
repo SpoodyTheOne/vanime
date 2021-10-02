@@ -66,15 +66,13 @@
 
 		<div id="search-page">
 			<div class="info">
-				<input class="search-box" />
-				<div class="show-info">
-					<img>
-					<h1></h1>
-					<pre></pre>
-				</div>
+				<input class="search-box" placeholder="Search..." />
 			</div>
 
-			<div class="list">
+			<div class="list"></div>
+
+			<div class="tooltip">
+				<h2>Anime Name</h2>
 			</div>
 		</div>
 
@@ -92,7 +90,16 @@
 
 		<div id="video-player">
 			<video src="../../traps.mp4" id="video-element"></video>
-			<div id="video-controls"></div>
+			<div id="video-controls">
+				<div class="progress-container">
+					<div class="buffered"></div>
+					<div class="progress"></div>
+				</div>
+				<div class="buttons">
+					<i class="fas fa-play"></i>
+					<i class="fas fa-forward"></i>
+				</div>
+			</div>
 			<div id="video-info">
 				<button>Back</button>
 				<h1 class="episode-name"></h1>

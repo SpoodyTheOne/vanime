@@ -24,6 +24,12 @@ class VideoPlayer {
 	static CurrentAnime;
 
 	/**
+	 * The last time the mouse was moved, or keyboard pressed etc.
+	 * used for showing the show info;
+	 */
+	static LastInteraction = 0;
+
+	/**
 	 * Initialize videoplayer with the parent element of the video element
 	 * @param {HTMLDivElement} element
 	 */
@@ -34,7 +40,10 @@ class VideoPlayer {
 		this.InfoElement = element.querySelector("#video-info");
 		this.BackButton = this.InfoElement.querySelector("button");
 
-		this.Container.style.display = "none";
+		//this.Container.style.display = "none";
+		this.Show();
+		this.HideInfo();
+		this.LastInteraction = performance.now();
 
 		this.BackButton.addEventListener("click", () => {
 			this.Hide();
@@ -46,7 +55,7 @@ class VideoPlayer {
 			}
 		});
 
-		this.InfoElement.addEventListener("click", (event ) => {
+		this.InfoElement.addEventListener("click", (event) => {
 			if (this.Visible && event.target != this.BackButton) {
 				this.TogglePlayback();
 			}
@@ -61,6 +70,22 @@ class VideoPlayer {
 				}
 			}
 		});
+
+		this.Container.addEventListener("mousemove", () => {
+			this.LastInteraction = performance.now();
+
+			if (this.InfoElement.style.display !== "none") {
+				this.HideInfo();
+			}
+		});
+
+		//check if the last interaction was more than 5 seconds ago
+		//if so, show #video-info
+		setInterval(() => {
+			if (this.LastInteraction + 5000 < performance.now() && !this.Playing) {
+				this.ShowInfo();
+			}
+		}, 1000);
 	};
 
 	static Show = () => {
@@ -110,6 +135,8 @@ class VideoPlayer {
 		this.Show();
 		this.CurrentlyPlaying = episode;
 
+		this.LastInteraction = performance.now();
+
 		//load episode url first, the other stuff is for details
 		this.VideoElement.src = await episode.EpisodeUrl;
 
@@ -136,7 +163,7 @@ class VideoPlayer {
 	 * Pauses the video
 	 */
 	static Pause = () => {
-		this.ShowInfo();
+		//this.ShowInfo();
 		this.VideoElement.pause();
 	};
 

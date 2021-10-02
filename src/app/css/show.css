@@ -1,11 +1,12 @@
 #featured {
 	width: 100%;
-	height: 33%;
+	min-height: 33%;
+	height: fit-content;
 	display: flex;
 	flex-wrap: wrap;
 	margin-bottom: 20px;
 
-	cursor:pointer;
+	cursor: pointer;
 }
 
 #featured img {
@@ -15,7 +16,7 @@
 }
 
 #featured .text {
-	max-width: 70%;
+	max-width: 60%;
 }
 
 #featured .text .description {
@@ -38,7 +39,7 @@
 }
 
 .show.loading {
-	cursor:inherit;
+	cursor: inherit;
 }
 
 .show {
@@ -59,7 +60,7 @@
 
 	margin: 4px;
 
-	cursor:pointer;
+	cursor: pointer;
 }
 
 .show .info {

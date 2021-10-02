@@ -11,6 +11,12 @@ class Searchbar {
 	/** @type {HTMLInputElement} */
 	static InputElement;
 
+	/** @type {Anime} */
+	static CurrentlyShownAnime = null;
+
+	/** @type {HTMLDivElement} */
+	static TooltipElement;
+
 	/**
 	 * Initializes the searchbar with an input element
 	 * @param {HTMLDivElement} page
@@ -19,6 +25,9 @@ class Searchbar {
 		this.SearchElement = page;
 		this.ListElement = this.SearchElement.querySelector(".list");
 		this.InputElement = this.SearchElement.querySelector(".info .search-box");
+		this.TooltipElement = this.SearchElement.querySelector(".tooltip");
+
+		this.Hide();
 
 		button.addEventListener("click", () => {
 			this.Show();
@@ -56,7 +65,7 @@ class Searchbar {
 
 	/**
 	 * Searches for this string and displays the anime' in the list
-	 * @param {Stri,g} string
+	 * @param {String} string
 	 */
 	static Search = async (string) => {
 		//clear list
@@ -73,10 +82,15 @@ class Searchbar {
 				image.classList.add("searched-show");
 				image.src = anime.Image;
 				image.onclick = () => {
+					//if (this.CurrentlyShownAnime == anime)
 					ShowPage.ShowAnime(anime);
+					//else this.ShowInfo(anime);
 				};
-				image.onmouseover = async () => {
-					this.ShowInfo(anime);
+				image.onmousemove = (event) => {
+					this.ShowTooltip(event, anime);
+				};
+				image.onmouseleave = () => {
+					this.HideTooltip();
 				};
 				this.ListElement.appendChild(image);
 			}
@@ -88,6 +102,12 @@ class Searchbar {
 	 * @param {Anime} anime
 	 */
 	static ShowInfo = async (anime) => {
+		for (let element of this.ListElement.querySelectorAll(".searched-show")) {
+			element.classList.remove("active");
+		}
+
+		this.CurrentlyShownAnime = anime;
+
 		let title = this.SearchElement.querySelector(".info h1");
 		let img = this.SearchElement.querySelector(".info img");
 		let pre = this.SearchElement.querySelector(".info pre");
@@ -101,6 +121,32 @@ class Searchbar {
 		let image = await anime.GetImage();
 		img.src = image;
 		let desc = await anime.GetDescription();
-		pre.innerText = desc;
+		if (this.CurrentlyShownAnime == anime) pre.innerText = desc;
+	};
+
+	/**
+	 *
+	 * @param {MouseEvent} event
+	 * @param {Anime} anime
+	 */
+	static ShowTooltip = async (event, anime) => {
+		this.TooltipElement.querySelector("h2").innerText = anime.Name;
+
+		this.TooltipElement.classList.add("active");
+
+		let offset = 0;
+
+		if (event.clientX + this.TooltipElement.offsetWidth / 2 > window.innerWidth) {
+			offset = window.innerWidth - (event.clientX + this.TooltipElement.offsetWidth / 2);
+		}
+
+		offset -= this.TooltipElement.offsetWidth / 2;
+
+		this.TooltipElement.style.top = event.clientY + 20 + "px";
+		this.TooltipElement.style.left = event.clientX + offset + "px";
+	};
+
+	static HideTooltip = () => {
+		this.TooltipElement.classList.remove("active");
 	};
 }

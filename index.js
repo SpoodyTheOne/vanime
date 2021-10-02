@@ -72,7 +72,8 @@ app.whenReady().then(() => {
 			"--disable-backgrounding-occluded-windows",
 			"--disable-renderer-backgrounding",
 		],
-		executablePath: __dirname + "/chromium/chrome",
+		executablePath:
+			__dirname + (process.platform === "win32" ? "/chromium/windows/chrome" : "/chromium/linux/chrome"),
 	})
 		.init()
 		.then(() => {

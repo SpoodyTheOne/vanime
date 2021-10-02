@@ -34,10 +34,12 @@ class ShowPage {
 
 		let i = 0;
 
-		for (let season of await Anime.GetSeasons()) {
+		let seasons = await Anime.GetSeasons();
+
+		for (let season of seasons) {
 			let option = document.createElement("option");
 			option.value = i;
-			option.innerText = `Season ${i + 1}`;
+			option.innerText = `Season ${i + 1}/${seasons.length}`;
 
 			this.ShowInfoSeasonSelector.appendChild(option);
 
@@ -70,7 +72,6 @@ class ShowPage {
 
 			element.onclick = async () => {
 				VideoPlayer.PlayEpisode(episode);
-                
 			};
 
 			this.ShowInfoEpisodeList.appendChild(element);
