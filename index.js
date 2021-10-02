@@ -59,6 +59,10 @@ ipcMain.handle("Wco.Search", (event, string) => {
 	return Wcofun.Instance.Search(string);
 });
 
+ipcMain.handle("Wco.GetDescription", (event, url) => {
+	return Wcofun.Instance.GetDescription(url);
+});
+
 app.whenReady().then(() => {
 	new Wcofun({
 		headless: true,

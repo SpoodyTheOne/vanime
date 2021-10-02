@@ -75,13 +75,15 @@ class Anime {
 			});
 		};
 
-		this.GetDescription = () => {
+		this.GetDescription = async () => {
 			if (this.Description)
 				return new Promise((resolve) => {
 					resolve(this.Description);
 				});
 
-			return Wcofun.GetDescription(this);
+			let description = await Wcofun.GetDescription(this);
+			this.Description = description;
+			return description;
 		};
 	}
 }
@@ -130,13 +132,15 @@ class Episode {
 		 * Gets the anime this episode is from
 		 * @returns {Promise<Anime>}
 		 */
-		this.GetAnime = () => {
+		this.GetAnime = async () => {
 			if (this.Anime)
 				return new Promise((resolve) => {
 					resolve(this.Anime);
 				});
 
-			return Wcofun.EpisodeGetAnime(this);
+			let anime = await Wcofun.EpisodeGetAnime(this);
+			this.Anime = anime;
+			return anime;
 		};
 	}
 

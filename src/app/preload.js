@@ -18,5 +18,8 @@ window.API = {
 	},
 	Search: (string) => {
 		return ipcRenderer.invoke("Wco.Search",string);
+	},
+	GetDescription: (Url) => {
+		return ipcRenderer.invoke("Wco.GetDescription",Url);
 	}
 };

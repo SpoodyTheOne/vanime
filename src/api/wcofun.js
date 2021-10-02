@@ -188,6 +188,18 @@ class Wcofun {
 			});
 		};
 
+		this.GetDescription = async (url) => {
+			let page = await this.CreateWorkerPage();
+			page.goto(url);
+			await page.waitForNavigation();
+			await this.RemoveAds();
+			let data = await page.$eval("#sidebar_cat p", (element) => {
+				return element.innerText;
+			});
+			page.close();
+			return data;
+		};
+
 		this.CreateWorkerPage = async () => {
 			if (Object.entries(this.WorkerPages).length > 6)
 				await new Promise(function (resolve, reject) {

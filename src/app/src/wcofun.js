@@ -70,6 +70,15 @@ class Wcofun {
 	};
 
 	/**
+	 * Gets the description of this anime
+	 * @param {Anime} anime 
+	 * @returns {Promise<String>}
+	 */
+	static GetDescription = async (anime) => {
+		return window.API.GetDescription(anime.Url);
+	}
+
+	/**
 	 * Gets the video url of this episode
 	 * @param {Episode} episode
 	 */
