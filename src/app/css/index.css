@@ -1,4 +1,4 @@
-* {
+*:not(i) {
 	font-family: Arial, Helvetica, sans-serif;
 	color: #eee;
 	margin: 0px;

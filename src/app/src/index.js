@@ -1,4 +1,10 @@
 (async function () {
+	//temporary for testing
+	//Loader.Hide();
+	
+	//move back down to Searchbar.init after
+	VideoPlayer.init(document.getElementById("video-player"));
+
 	//get daily featured anime
 	let anime = await Wcofun.GetFeatured();
 	//get featured element
@@ -45,8 +51,6 @@
 		//save to elements array
 		elements.push(show);
 	}
-
-	VideoPlayer.init(document.getElementById("video-player"));
 
 	//hide show episode selector
 	ShowPage.ShowInfoElement.style.display = "none";

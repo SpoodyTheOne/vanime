@@ -85,3 +85,7 @@
 	background-color: #464646;
 	width: 45%;
 }
+
+#video-controls .buttons {
+	font-size: 5vh !important;
+}
