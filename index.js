@@ -21,14 +21,23 @@ function CreateWindow() {
 		{
 			accelerator: "ctrl+r",
 			role: "reload",
+			label:"",
+			visible:false
 		},
 		{
 			accelerator: "ctrl+shift+i",
 			role: "toggleDevTools",
+			label:"",
+			visible:false,
 		},
 	]);
 
 	Window.menuBarVisible = false;
+	Window.setMenuBarVisibility(false)
+
+	Window.on("leave-full-screen",() => {
+		Window.setMenuBarVisibility(false);
+	})
 
 	Window.setMenu(menu);
 

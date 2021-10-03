@@ -1,9 +1,12 @@
 (async function () {
 	//temporary for testing
 	//Loader.Hide();
-	
+
 	//move back down to Searchbar.init after
 	VideoPlayer.init(document.getElementById("video-player"));
+	//VideoPlayer.Hide();
+	
+	Tooltip.init();
 
 	//get daily featured anime
 	let anime = await Wcofun.GetFeatured();

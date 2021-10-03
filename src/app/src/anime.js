@@ -6,6 +6,7 @@ class Anime {
 	 * @param {Episode[]} Episodes
 	 */
 	static SortEpisodesToSeasons(Anime, Episodes) {
+		/** @type {Season[]} */
 		let Seasons = [];
 		let CurrentSeason = new Season(Anime);
 		let CurrentSeasonIndex = "1";
@@ -23,6 +24,7 @@ class Anime {
 					Seasons.push(CurrentSeason);
 					CurrentSeason = new Season(Anime);
 					CurrentSeasonIndex = _season;
+					CurrentSeason.SeasonIndex = Seasons.length;
 				}
 			} catch (e) {
 				//name didnt include a season,
@@ -34,6 +36,11 @@ class Anime {
 		}
 
 		Seasons.push(CurrentSeason);
+
+		//remove empty seasons
+		Seasons = Seasons.filter((x) => {
+			return x.Episodes.length != 0;
+		});
 
 		return Seasons;
 	}
@@ -99,6 +106,8 @@ class Season {
 
 		/** @type {Anime} */
 		this.Anime = Anime ?? null;
+
+		this.SeasonIndex = 0;
 	}
 }
 
@@ -142,6 +151,27 @@ class Episode {
 			this.Anime = anime;
 			return anime;
 		};
+
+		/**
+		 * Gets the episode after this.
+		 * Returns null if this is the last episode
+		 * @returns {Promise<Episode>}
+		 */
+		this.GetNextEpisode = async () => {
+			let index = this.EpisodeIndex;
+
+			if (this.Season.Episodes.length > index + 1) {
+				return this.Season.Episodes[index + 1];
+			} else {
+				let seasons = await this.Anime.GetSeasons();
+
+				if (seasons.length > this.Season.SeasonIndex + 1) {
+					return seasons[this.Season.SeasonIndex + 1].Episodes[0];
+				}
+			}
+
+			return null;
+		};
 	}
 
 	/**
@@ -156,6 +186,6 @@ class Episode {
 	 * The index of this episode in the season
 	 */
 	get EpisodeIndex() {
-		return parseInt(this.Name.match(/episode [1-9]+/gi)[0].substring(8));
+		return parseInt(this.Name.match(/episode [1-9]+/gi)[0].substring(8)) - 1;
 	}
 }

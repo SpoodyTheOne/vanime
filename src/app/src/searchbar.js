@@ -87,10 +87,10 @@ class Searchbar {
 					//else this.ShowInfo(anime);
 				};
 				image.onmousemove = (event) => {
-					this.ShowTooltip(event, anime);
+					Tooltip.ShowTooltip(event, anime.Name);
 				};
 				image.onmouseleave = () => {
-					this.HideTooltip();
+					Tooltip.HideTooltip();
 				};
 				this.ListElement.appendChild(image);
 			}
@@ -122,31 +122,5 @@ class Searchbar {
 		img.src = image;
 		let desc = await anime.GetDescription();
 		if (this.CurrentlyShownAnime == anime) pre.innerText = desc;
-	};
-
-	/**
-	 *
-	 * @param {MouseEvent} event
-	 * @param {Anime} anime
-	 */
-	static ShowTooltip = async (event, anime) => {
-		this.TooltipElement.querySelector("h2").innerText = anime.Name;
-
-		this.TooltipElement.classList.add("active");
-
-		let offset = 0;
-
-		if (event.clientX + this.TooltipElement.offsetWidth / 2 > window.innerWidth) {
-			offset = window.innerWidth - (event.clientX + this.TooltipElement.offsetWidth / 2);
-		}
-
-		offset -= this.TooltipElement.offsetWidth / 2;
-
-		this.TooltipElement.style.top = event.clientY + 20 + "px";
-		this.TooltipElement.style.left = event.clientX + offset + "px";
-	};
-
-	static HideTooltip = () => {
-		this.TooltipElement.classList.remove("active");
 	};
 }

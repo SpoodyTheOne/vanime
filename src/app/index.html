@@ -70,10 +70,6 @@
 			</div>
 
 			<div class="list"></div>
-
-			<div class="tooltip">
-				<h2>Anime Name</h2>
-			</div>
 		</div>
 
 		<div id="show-info" class="hidden">
@@ -89,22 +85,35 @@
 		</div>
 
 		<div id="video-player">
-			<video src="../../traps.mp4" id="video-element"></video>
+			<video id="video-element">
+			<source src="../../traps.mp4">
+			</video>
 			<div id="video-controls">
 				<div class="progress-container">
 					<div class="buffered"></div>
 					<div class="progress"></div>
 				</div>
 				<div class="buttons">
-					<i class="fas fa-play"></i>
-					<i class="fas fa-forward"></i>
+					<i class="fas fa-play toggle-playback-btn"></i>
+					<i class="fas fa-forward fast-forward-btn"></i>
 				</div>
+				<div class="info">
+					<h2>00:00 / 00:00</h2>
+				</div>
+				<i class="fullscreen-btn fas fa-expand"></i>
 			</div>
+			<button>Back</button>
 			<div id="video-info">
-				<button>Back</button>
 				<h1 class="episode-name"></h1>
 				<pre class="anime-description"></pre>
 			</div>
+			<div class="loader">
+				<i class="fas fa-spinner fa-pulse"></i>
+			</div>
+		</div>
+
+		<div id="tooltip">
+			<h2>Anime Name</h2>
 		</div>
 
 		<div id="loader">
@@ -114,6 +123,7 @@
 		</div>
 
 		<script src="./src/loader.js"></script>
+		<script src="./src/tooltip.js"></script>
 		<script src="./src/wcofun.js"></script>
 		<script src="./src/anime.js"></script>
 		<script src="./src/videoplayer.js"></script>
