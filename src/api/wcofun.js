@@ -106,8 +106,13 @@ class Wcofun {
 				let title = document.querySelector(".video-title .h1-tag a");
 				let name = title.innerText;
 				let url = title.href;
+				let description = "";
 
-				let description = document.querySelector("#sidebar_cat p").innerText;
+				try {
+					description = document.querySelector("#sidebar_cat p").innerText;
+				} catch (e) {
+					//g ay
+				}
 
 				let image = document.querySelector("#sidebar_cat img").src;
 

@@ -13,6 +13,15 @@ class Wcofun {
 	};
 
 	/**
+	 * 
+	 * @param {Anime} Anime 
+	 * @returns 
+	 */
+	static GetImage = async (Anime) => {
+		return window.API.GetImage(Anime.Url);
+	}
+
+	/**
 	 * Gets the daily featured anime
 	 * @returns {Promise<Anime>}
 	 */

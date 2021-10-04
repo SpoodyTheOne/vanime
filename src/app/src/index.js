@@ -2,10 +2,8 @@
 	//temporary for testing
 	//Loader.Hide();
 
-	//move back down to Searchbar.init after
-	VideoPlayer.init(document.getElementById("video-player"));
 	//VideoPlayer.Hide();
-	
+
 	Tooltip.init();
 
 	//get daily featured anime
@@ -28,6 +26,7 @@
 		Searchbar.Hide();
 	});
 
+	VideoPlayer.init(document.getElementById("video-player"));
 	Searchbar.init(document.getElementById("search-page"), sidebar.querySelector(".fa-search"));
 
 	//get recently added episodes
@@ -35,6 +34,7 @@
 
 	//get template element and parent
 	let shows = document.querySelector("#recent-releases");
+	let watched = document.querySelector("#history");
 	let template = document.querySelector("#recent-releases .show:first-child");
 
 	//array for saving show elements
@@ -58,8 +58,49 @@
 	//hide show episode selector
 	ShowPage.ShowInfoElement.style.display = "none";
 
+	let history = await WatchHistory.GetWatched();
+	let historyElements = [];
+
+	for (let data of history) {
+		let show = template.cloneNode(true);
+
+		show.children[0].src = "./images/loading.gif";
+		show.children[1].children[0].innerText = "Loading...";
+		show.children[1].children[1].innerText = "Loading...";
+
+		show.classList.remove("loading");
+
+		//add event listener for viewing
+		show.addEventListener("click", () => {
+			console.log("Showing anime");
+			VideoPlayer.PlayEpisode(data.Episode);
+		});
+
+		//parent to #shows
+		watched.appendChild(show);
+		//save to elements array
+		historyElements.push(show);
+	}
+
 	//hide loading screen
 	Loader.Hide();
+
+	let k = 0;
+
+	for (let data of history) {
+		let show = historyElements[k];
+
+		let recent = data.Episode.Anime;
+		show.children[0].src = await recent.GetImage();
+		show.children[1].children[0].innerText = data.Episode.Name;
+		show.children[1].children[1].innerText = await recent.GetDescription();
+
+		show.addEventListener("click",() => {
+			ShowPage.ShowAnime(recent);
+		})
+
+		k++;
+	}
 
 	let i = 0;
 
@@ -68,7 +109,7 @@
 
 		episode.GetAnime().then((recent) => {
 			show.children[0].src = recent.Image;
-			show.children[1].children[0].innerText = recent.Name;
+			show.children[1].children[0].innerText = episode.Name;
 			show.children[1].children[1].innerText = recent.Description;
 			show.classList.remove("loading");
 
@@ -76,6 +117,7 @@
 			show.addEventListener("click", () => {
 				console.log("Showing anime");
 				ShowPage.ShowAnime(recent);
+				VideoPlayer.PlayEpisode(episode);
 			});
 		});
 

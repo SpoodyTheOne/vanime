@@ -39,6 +39,11 @@ class VideoPlayer {
 	static IsWaiting = true;
 
 	/**
+	 * Are we allowed to save the current time
+	 */
+	static CanSaveTimestamp = false;
+
+	/**
 	 * The last time the mouse was moved, or keyboard pressed etc.
 	 * used for showing the show info;
 	 */
@@ -54,9 +59,10 @@ class VideoPlayer {
 		this.ControlsElement = element.querySelector("#video-controls");
 		this.InfoElement = element.querySelector("#video-info");
 		this.BackButton = this.Container.querySelector("button");
+		this.PlaybackButton = this.ControlsElement.querySelector(".buttons .toggle-playback-btn");
 
 		//this.Container.style.display = "none";
-		this.Show();
+		this.Hide();
 		this.HideInfo();
 		this.LastInteraction = performance.now();
 
@@ -92,13 +98,11 @@ class VideoPlayer {
 				event.target.classList.remove("fa-compress");
 				event.target.classList.add("fa-expand");
 			} else {
-				this.Container.requestFullscreen();
+				document.body.requestFullscreen();
 				event.target.classList.remove("fa-expand");
 				event.target.classList.add("fa-compress");
 			}
 		});
-
-		this.PlaybackButton = this.ControlsElement.querySelector(".buttons .toggle-playback-btn");
 
 		this.PlaybackButton.addEventListener("click", () => {
 			this.TogglePlayback();
@@ -127,6 +131,9 @@ class VideoPlayer {
 				this.ShowInfo();
 			} else if (!this.IsWaiting && this.LastInteraction + 3000 < performance.now() && this.Playing) {
 				this.HideControls();
+			} else if (this.Playing && this.CanSaveTimestamp) {
+				if (this.CurrentlyPlaying != null)
+					WatchHistory.SetWatched(this.CurrentlyPlaying, this.VideoElement.currentTime);
 			}
 		}, 1000);
 
@@ -138,6 +145,13 @@ class VideoPlayer {
 		this.VideoElement.addEventListener("playing", () => {
 			this.IsWaiting = false;
 			this.Container.querySelector(".loader").classList.add("hidden");
+		});
+
+		this.VideoElement.addEventListener("durationchange", async () => {
+			//video changed, check if theres a saved time and set the video
+			//if there is
+			this.VideoElement.currentTime = await WatchHistory.GetTime(this.CurrentlyPlaying);
+			this.CanSaveTimestamp = true;
 		});
 
 		this.InitProgressBar();
@@ -173,6 +187,10 @@ class VideoPlayer {
 			this.ProgressBar.style.width = (this.VideoElement.currentTime / this.VideoElement.duration) * 100 + "%";
 			this.TimeInfo.innerText =
 				this.FormatTime(this.VideoElement.currentTime) + " / " + this.FormatTime(this.VideoElement.duration);
+
+			if (this.VideoElement.currentTime == this.VideoElement.duration) {
+				this.PlayNextEpisode();
+			}
 		});
 
 		this.ProgressContainer.addEventListener("mousemove", (event) => {
@@ -203,21 +221,23 @@ class VideoPlayer {
 	};
 
 	static UpdateMediaSession = () => {
-		navigator.mediaSession.metadata = new MediaMetadata({
-			title: this.CurrentAnime.Name,
-			artist: `Season ${this.CurrentlyPlaying.Season.SeasonIndex + 1} Episode ${
-				this.CurrentlyPlaying.EpisodeIndex + 1
-			}`,
-		});
+		try {
+			navigator.mediaSession.metadata = new MediaMetadata({
+				title: this.CurrentAnime.Name,
+				artist: `Season ${this.CurrentlyPlaying.Season.SeasonIndex + 1} Episode ${
+					this.CurrentlyPlaying.EpisodeIndex + 1
+				}`,
+			});
 
-		navigator.mediaSession.playbackState = "playing";
+			navigator.mediaSession.playbackState = "playing";
 
-		// @ts-ignore
-		navigator.mediaSession.setActionHandler("play", VideoPlayer.Play);
-		// @ts-ignore
-		navigator.mediaSession.setActionHandler("pause", VideoPlayer.TogglePlayback);
+			// @ts-ignore
+			navigator.mediaSession.setActionHandler("play", VideoPlayer.Play);
+			// @ts-ignore
+			navigator.mediaSession.setActionHandler("pause", VideoPlayer.TogglePlayback);
 
-		navigator.mediaSession.setActionHandler("nexttrack", VideoPlayer.PlayNextEpisode);
+			navigator.mediaSession.setActionHandler("nexttrack", VideoPlayer.PlayNextEpisode);
+		} catch (e) {}
 	};
 
 	static PlayNextEpisode = async () => {
@@ -239,14 +259,7 @@ class VideoPlayer {
 	 * Show the video player
 	 */
 	static Show = () => {
-		if (this.Container.style.display == "block") return;
-
-		Loader.Show();
-
-		setTimeout(() => {
-			this.Container.classList.remove("hidden");
-			this.Container.style.display = "block";
-		}, 500);
+		this.Container.classList.remove("hidden");
 	};
 
 	/**
@@ -256,9 +269,6 @@ class VideoPlayer {
 		this.Pause();
 
 		this.Container.classList.add("hidden");
-		setTimeout(() => {
-			this.Container.style.display = "none";
-		}, 500);
 	};
 
 	/**
@@ -307,6 +317,7 @@ class VideoPlayer {
 	 * @param {Episode} episode
 	 */
 	static PlayEpisode = async (episode) => {
+		this.CanSaveTimestamp = false;
 		this.Show();
 		this.CurrentlyPlaying = episode;
 
@@ -337,9 +348,6 @@ class VideoPlayer {
 		this.ShowControls();
 
 		this.UpdateMediaSession();
-
-		//hide the loader
-		Loader.Hide();
 	};
 
 	/**
@@ -370,6 +378,8 @@ class VideoPlayer {
 
 		this.PlaybackButton.classList.remove("fa-play");
 		this.PlaybackButton.classList.add("fa-pause");
+
+		this.UpdateMediaSession();
 	};
 
 	/**
@@ -387,7 +397,7 @@ class VideoPlayer {
 	}
 
 	static get Visible() {
-		return this.Container.style.display == "block";
+		return !this.Container.classList.contains("hidden");
 	}
 
 	static FormatTime = (seconds) => {

@@ -1,5 +1,6 @@
 const { app, BrowserWindow, Menu, ipcMain } = require("electron");
 const { Wcofun } = require("./src/api/wcofun.js");
+const { History } = require("./src/api/history.js");
 
 /** @type {Electron.BrowserWindow} */
 let Window;
@@ -21,23 +22,23 @@ function CreateWindow() {
 		{
 			accelerator: "ctrl+r",
 			role: "reload",
-			label:"",
-			visible:false
+			label: "",
+			visible: false,
 		},
 		{
 			accelerator: "ctrl+shift+i",
 			role: "toggleDevTools",
-			label:"",
-			visible:false,
+			label: "",
+			visible: false,
 		},
 	]);
 
 	Window.menuBarVisible = false;
-	Window.setMenuBarVisibility(false)
+	Window.setMenuBarVisibility(false);
 
-	Window.on("leave-full-screen",() => {
+	Window.on("leave-full-screen", () => {
 		Window.setMenuBarVisibility(false);
-	})
+	});
 
 	Window.setMenu(menu);
 
@@ -70,6 +71,22 @@ ipcMain.handle("Wco.Search", (event, string) => {
 
 ipcMain.handle("Wco.GetDescription", (event, url) => {
 	return Wcofun.Instance.GetDescription(url);
+});
+
+ipcMain.handle("Wco.GetImage", (event, url) => {
+	return Wcofun.Instance.GetImage(url);
+});
+
+ipcMain.handle("History.GetWatched", () => {
+	return History.GetWatched();
+});
+
+ipcMain.handle("History.SetWatched", (event, name, url, season, episode, time) => {
+	return History.SetWatched(name, url, season, episode, time);
+});
+
+ipcMain.handle("History.GetTime", (event, name) => {
+	return History.GetTime(name);
 });
 
 app.whenReady().then(() => {

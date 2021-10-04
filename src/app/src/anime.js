@@ -13,6 +13,8 @@ class Anime {
 
 		Episodes.reverse();
 
+		let episodeIndex = 0;
+
 		for (const episode of Episodes) {
 			//check if new season
 			try {
@@ -25,6 +27,7 @@ class Anime {
 					CurrentSeason = new Season(Anime);
 					CurrentSeasonIndex = _season;
 					CurrentSeason.SeasonIndex = Seasons.length;
+					episodeIndex = 0;
 				}
 			} catch (e) {
 				//name didnt include a season,
@@ -32,6 +35,8 @@ class Anime {
 			}
 
 			episode.Season = CurrentSeason;
+			episode._indexInSeason = episodeIndex;
+			episodeIndex++;
 			CurrentSeason.Episodes.push(episode);
 		}
 
@@ -70,16 +75,12 @@ class Anime {
 			});
 		};
 
-		this.GetImage = () => {
-			if (this.Image)
-				return new Promise((resolve) => {
-					resolve(this.Image);
-				});
+		this.GetImage = async () => {
+			if (this.Image) return this.Image;
 
-			return Wcofun.Instance.GetImage(this).then((src) => {
-				this.Image = src;
-				return src;
-			});
+			let image = await Wcofun.GetImage(this);
+			this.Image = image;
+			return image;
 		};
 
 		this.GetDescription = async () => {
@@ -138,14 +139,17 @@ class Episode {
 		this.PageUrl = PageUrl ?? "";
 
 		/**
+		 * @type {Number}
+		 * The index of this episode in the season
+		 */
+		this._indexInSeason = 0;
+
+		/**
 		 * Gets the anime this episode is from
 		 * @returns {Promise<Anime>}
 		 */
 		this.GetAnime = async () => {
-			if (this.Anime)
-				return new Promise((resolve) => {
-					resolve(this.Anime);
-				});
+			if (this.Anime) return this.Anime;
 
 			let anime = await Wcofun.EpisodeGetAnime(this);
 			this.Anime = anime;
@@ -186,6 +190,6 @@ class Episode {
 	 * The index of this episode in the season
 	 */
 	get EpisodeIndex() {
-		return parseInt(this.Name.match(/episode [1-9]+/gi)[0].substring(8)) - 1;
+		return this._indexInSeason ?? parseInt(this.Name.match(/episode [1-9]+/gi)[0].substring(8)) - 1;
 	}
 }
