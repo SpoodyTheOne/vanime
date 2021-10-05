@@ -71,9 +71,15 @@
 		show.classList.remove("loading");
 
 		//add event listener for viewing
-		show.addEventListener("click", () => {
+		//plays the latest episode this user watched
+		//of this anime
+		show.addEventListener("click", async () => {
 			console.log("Showing anime");
-			VideoPlayer.PlayEpisode(data.Episode);
+			Loader.Show()
+			let anime = await data.Episode.GetAnime();
+			let episode = await WatchHistory.GetEpisode(anime);
+			VideoPlayer.PlayEpisode(episode);
+			Loader.Hide();
 		});
 
 		//parent to #shows
@@ -92,12 +98,8 @@
 
 		let recent = data.Episode.Anime;
 		show.children[0].src = await recent.GetImage();
-		show.children[1].children[0].innerText = data.Episode.Name;
+		show.children[1].children[0].innerText = recent.Name;
 		show.children[1].children[1].innerText = await recent.GetDescription();
-
-		show.addEventListener("click",() => {
-			ShowPage.ShowAnime(recent);
-		})
 
 		k++;
 	}

@@ -85,8 +85,12 @@ ipcMain.handle("History.SetWatched", (event, name, url, season, episode, time) =
 	return History.SetWatched(name, url, season, episode, time);
 });
 
-ipcMain.handle("History.GetTime", (event, name) => {
-	return History.GetTime(name);
+ipcMain.handle("History.GetTime", (event, name, season, episode) => {
+	return History.GetTime(name, season, episode);
+});
+
+ipcMain.handle("History.GetEpisode", (event, name) => {
+	return History.GetEpisode(name);
 });
 
 app.whenReady().then(() => {

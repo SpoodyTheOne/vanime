@@ -109,7 +109,7 @@ class VideoPlayer {
 		});
 
 		this.ControlsElement.querySelector(".buttons .fast-forward-btn").addEventListener("click", async () => {
-			await PlayNextEpisode();
+			await this.PlayNextEpisode();
 		});
 
 		this.Container.addEventListener("mousemove", () => {
@@ -164,23 +164,20 @@ class VideoPlayer {
 		this.ProgressContainer = this.Container.querySelector("#video-controls .progress-container");
 		this.ProgressBar = this.ProgressContainer.querySelector(".progress");
 		this.ProgressBuffer = this.ProgressContainer.querySelector(".buffered");
+		this.ProgressSeeking = this.ProgressContainer.querySelector(".seeking");
 
 		this.TimeInfo = this.Container.querySelector("#video-controls .info h2");
 
 		this.VideoElement.addEventListener("progress", () => {
+			let bufferEnd = 0;
+
 			for (var i = 0; i < this.VideoElement.buffered.length; i++) {
-				if (
-					this.VideoElement.buffered.start(this.VideoElement.buffered.length - 1 - i) <=
-					this.VideoElement.currentTime
-				) {
-					this.ProgressBuffer.style.width =
-						(this.VideoElement.buffered.end(this.VideoElement.buffered.length - 1 - i) /
-							this.VideoElement.duration) *
-							100 +
-						"%";
-					break;
+				if (this.VideoElement.buffered.end(i) > bufferEnd) {
+					bufferEnd = this.VideoElement.buffered.end(i);
 				}
 			}
+
+			this.ProgressBuffer.style.width = (bufferEnd / this.VideoElement.duration) * 100 + "%";
 		});
 
 		this.VideoElement.addEventListener("timeupdate", () => {
@@ -202,6 +199,8 @@ class VideoPlayer {
 			let percent = mpos / offset;
 
 			Tooltip.ShowTooltip(event, this.FormatTime(this.VideoElement.duration * percent));
+
+			this.ProgressSeeking.style.width = percent * 100 + "%";
 		});
 
 		this.ProgressContainer.addEventListener("click", (event) => {
@@ -217,6 +216,7 @@ class VideoPlayer {
 
 		this.ProgressContainer.addEventListener("mouseleave", () => {
 			Tooltip.HideTooltip();
+			this.ProgressSeeking.style.width = "0px";
 		});
 	};
 
@@ -320,6 +320,8 @@ class VideoPlayer {
 		this.CanSaveTimestamp = false;
 		this.Show();
 		this.CurrentlyPlaying = episode;
+
+		console.log(episode);
 
 		this.LastInteraction = performance.now();
 

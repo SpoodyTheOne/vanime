@@ -37,6 +37,23 @@ class WatchHistory {
 	 * @param {Episode} Episode
 	 */
 	static async GetTime(Episode) {
-		return window.API.GetTime(Episode.Anime.Name);
+		return await window.API.GetTime(Episode.Anime.Name, Episode.Season.SeasonIndex, Episode.EpisodeIndex);
+	}
+
+	/**
+	 * Gets the episode of this anime the user has reached, aswell as the timestamp
+	 * @param {Anime} Anime
+	 */
+	static async GetEpisode(anime) {
+		let raw = await window.API.HistoryGetEpisode(anime.Name);
+
+		let am = new Anime(raw.Url);
+		am.Name = raw.Name;
+		let seasons = await am.GetSeasons();
+
+		let episode = seasons[raw.Season].Episodes[raw.Episode];
+		episode.Anime = am;
+
+		return episode;
 	}
 }

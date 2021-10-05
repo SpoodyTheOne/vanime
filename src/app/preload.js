@@ -34,7 +34,11 @@ window.API = {
 		return ipcRenderer.invoke("History.SetWatched", name, url, season, episode, time);
 	},
 
-	GetTime: (name) => {
-		return ipcRenderer.invoke("History.GetTime", name);
+	GetTime: (name, season, episode) => {
+		return ipcRenderer.invoke("History.GetTime", name, season, episode);
+	},
+
+	HistoryGetEpisode: (name) => {
+		return ipcRenderer.invoke("History.GetEpisode", name);
 	},
 };

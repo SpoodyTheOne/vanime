@@ -93,11 +93,14 @@
 }
 
 #video-controls .progress-container {
-	width: 100%;
 	height: 1.5vh;
 	background-color: #22222c80;
 	position: absolute;
+	left: 1vh;
+	right: 1vh;
 	top: 0px;
+	border-radius: 50px;
+	overflow: hidden;
 }
 
 #video-controls .progress-container div {
@@ -113,6 +116,10 @@
 
 #video-controls .progress-container .buffered {
 	background-color: #46464680;
+}
+
+#video-controls .progress-container .seeking {
+	background-color: #7c7c7cb0;
 }
 
 #video-controls .buttons {

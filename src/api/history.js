@@ -40,6 +40,11 @@ class History {
 		return this.Watched;
 	}
 
+	static async GetEpisode(name) {
+		await this.LoadWatched();
+		return this.Watched[name] ?? { Name: name, Episode: 0, Season: 0, Time: 0 };
+	}
+
 	static async SetWatched(name, url, season, episode, time) {
 		await this.LoadWatched();
 		this.Watched[name] = {
@@ -63,8 +68,10 @@ class History {
 		fs.writeFile(this.FilePath, data);
 	}
 
-	static async GetTime(name) {
+	static async GetTime(name, season, episode) {
 		await this.LoadWatched();
+
+		if (season != this.Watched[name].Season || episode != this.Watched[name].Episode) return 0;
 
 		return this.Watched[name]?.Time ?? 0;
 	}
