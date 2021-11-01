@@ -9,6 +9,8 @@ class VideoPlayer {
 	static InfoElement;
 	/** @type {HTMLButtonElement} */
 	static BackButton;
+	/** @type {HTMLButtonElement} */
+	static FullscreenButton;
 	/** @type {HTMLDivElement} */
 	static ProgressContainer;
 	/** @type {HTMLDivElement} */
@@ -19,6 +21,8 @@ class VideoPlayer {
 	static TimeInfo;
 	/** @type {HTMLLIElement} */
 	static PlaybackButton;
+	/** @type {HTMLInputElement} */
+	static VolumeControl;
 
 	static _HideInfoTimeout = null;
 
@@ -60,6 +64,8 @@ class VideoPlayer {
 		this.InfoElement = element.querySelector("#video-info");
 		this.BackButton = this.Container.querySelector("button");
 		this.PlaybackButton = this.ControlsElement.querySelector(".buttons .toggle-playback-btn");
+		this.VolumeControl = this.ControlsElement.querySelector("#volume-control");
+		this.FullscreenButton = this.ControlsElement.querySelector(".fullscreen-btn");
 
 		//this.Container.style.display = "none";
 		this.Hide();
@@ -68,6 +74,7 @@ class VideoPlayer {
 
 		this.BackButton.addEventListener("click", () => {
 			this.Hide();
+			WatchHistory.CreateWatchedList();
 		});
 
 		this.VideoElement.addEventListener("click", () => {
@@ -82,26 +89,10 @@ class VideoPlayer {
 			}
 		});
 
-		window.addEventListener("keydown", (event) => {
-			if (this.Visible) {
-				switch (event.key) {
-					case " ":
-						this.TogglePlayback();
-						break;
-				}
-			}
-		});
+		this.CreateKeyboardShortcuts();
 
-		this.ControlsElement.querySelector(".fullscreen-btn").addEventListener("click", (event) => {
-			if (document.fullscreenElement) {
-				document.exitFullscreen();
-				event.target.classList.remove("fa-compress");
-				event.target.classList.add("fa-expand");
-			} else {
-				document.body.requestFullscreen();
-				event.target.classList.remove("fa-expand");
-				event.target.classList.add("fa-compress");
-			}
+		this.FullscreenButton.addEventListener("click", () => {
+			this.ToggleFullscreen();
 		});
 
 		this.PlaybackButton.addEventListener("click", () => {
@@ -188,6 +179,8 @@ class VideoPlayer {
 			if (this.VideoElement.currentTime == this.VideoElement.duration) {
 				this.PlayNextEpisode();
 			}
+
+			this.VideoElement.volume = this.VolumeControl.value / 100;
 		});
 
 		this.ProgressContainer.addEventListener("mousemove", (event) => {
@@ -220,14 +213,75 @@ class VideoPlayer {
 		});
 	};
 
+	static CreateKeyboardShortcuts() {
+		window.addEventListener("keydown", (event) => {
+			if (!this.Visible) return;
+
+			this.LastInteraction = performance.now();
+
+			switch (event.key) {
+				case "f":
+					this.ToggleFullscreen();
+					break;
+				case "ArrowRight":
+					this.SeekRelative(10);
+					break;
+				case "ArrowLeft":
+					this.SeekRelative(-10);
+					break;
+				case " ":
+					this.TogglePlayback();
+					break;
+				case "Escape":
+					this.Pause();
+					break;
+			}
+		});
+	}
+
+	/**
+	 * Seek `amount` number of seconds back and forth
+	 * @param {Number} amount
+	 */
+	static SeekRelative(amount) {
+		this.VideoElement.currentTime += amount;
+	}
+
+	static ToggleFullscreen() {
+		if (this.IsFullscreen) this.ExitFullscreen();
+		else this.GoFullscreen();
+	}
+
+	static GoFullscreen() {
+		if (this.IsFullscreen) return;
+		document.documentElement.requestFullscreen();
+		this.FullscreenButton.classList.remove("fa-expand");
+		this.FullscreenButton.classList.add("fa-compress");
+	}
+
+	static ExitFullscreen() {
+		if (!this.IsFullscreen) return;
+		document.exitFullscreen();
+		this.FullscreenButton.classList.remove("fa-compress");
+		this.FullscreenButton.classList.add("fa-expand");
+	}
+
+	/**
+	 * Is the videoplayer in fullscreen?
+	 */
+	static get IsFullscreen() {
+		return document.fullscreenElement != null;
+	}
+
 	static UpdateMediaSession = () => {
 		try {
-			navigator.mediaSession.metadata = new MediaMetadata({
-				title: this.CurrentAnime.Name,
-				artist: `Season ${this.CurrentlyPlaying.Season.SeasonIndex + 1} Episode ${
-					this.CurrentlyPlaying.EpisodeIndex + 1
-				}`,
-			});
+			if ("mediaSession" in navigator) {
+				navigator.mediaSession.metadata = new MediaMetadata({
+					title: "Podcast Episode Title",
+					artist: "Podcast Host",
+					album: "Podcast Name",
+				});
+			}
 
 			navigator.mediaSession.playbackState = "playing";
 
@@ -269,6 +323,8 @@ class VideoPlayer {
 		this.Pause();
 
 		this.Container.classList.add("hidden");
+
+		this.ExitFullscreen();
 	};
 
 	/**
@@ -317,6 +373,13 @@ class VideoPlayer {
 	 * @param {Episode} episode
 	 */
 	static PlayEpisode = async (episode) => {
+		if (episode == this.CurrentlyPlaying) {
+			this.Play();
+			return;
+		}
+
+		this.VideoElement.src = "";
+
 		this.CanSaveTimestamp = false;
 		this.Show();
 		this.CurrentlyPlaying = episode;

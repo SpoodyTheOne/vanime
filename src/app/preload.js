@@ -41,4 +41,8 @@ window.API = {
 	HistoryGetEpisode: (name) => {
 		return ipcRenderer.invoke("History.GetEpisode", name);
 	},
+
+	HistoryRemove: (name) => {
+		return ipcRenderer.invoke("History.Remove", name);
+	},
 };

@@ -51,6 +51,7 @@ class Searchbar {
 		setTimeout(() => {
 			this.SearchElement.classList.remove("hidden");
 		}, 1);
+		this.InputElement.focus();
 	};
 
 	/**

@@ -119,11 +119,38 @@
 }
 
 #video-controls .progress-container .seeking {
-	background-color: #7c7c7cb0;
+	background-color: #7c7c7c80;
 }
 
 #video-controls .buttons {
 	font-size: 4vh !important;
+}
+
+#video-controls .buttons i:first-child {
+	margin-right: 0px;
+}
+
+#video-controls .info {
+	display: flex;
+}
+
+#video-controls .info input {
+	margin-top: 2vh;
+	margin-right: 1vh;
+	height: 2vh;
+	-webkit-appearance: none;
+	background-color: #23232c;
+	overflow: hidden;
+	border-radius: 50px;
+	width: 22vh;
+}
+
+#video-controls .info input::-webkit-slider-thumb {
+	-webkit-appearance: none;
+	width: 0px;
+	height: 2vh;
+	background-color: #eee;
+	box-shadow: -22vh 0px 0px 22vh #eee;
 }
 
 #video-player button {

@@ -34,7 +34,7 @@
 	display: none;
 }
 
-.shows .show:first-child {
+#recent-releases .show:first-child {
 	display: none;
 }
 
@@ -61,6 +61,16 @@
 	margin: 4px;
 
 	cursor: pointer;
+
+	overflow: hidden;
+}
+
+.show.broken {
+	pointer-events: none;
+}
+
+.show .history-remove-btn {
+	display: none;
 }
 
 .show .info {
@@ -87,4 +97,14 @@
 
 .show:hover .info {
 	width: 55vh;
+}
+
+#history .show .history-remove-btn {
+	display: block;
+	position: absolute;
+	top: 0.2vh;
+	left: 15vh;
+	font-size: 5vh;
+	background-color: #18181ab6;
+	border-radius: 5px;
 }

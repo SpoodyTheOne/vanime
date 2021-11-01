@@ -53,6 +53,7 @@ class History {
 			Season: season,
 			Episode: episode,
 			Time: time,
+			LastWatched: Date.now(),
 		};
 	}
 
@@ -65,15 +66,21 @@ class History {
 
 		data = JSON.stringify(data);
 
-		fs.writeFile(this.FilePath, data);
+		await fs.writeFile(this.FilePath, data);
 	}
 
 	static async GetTime(name, season, episode) {
 		await this.LoadWatched();
 
-		if (season != this.Watched[name].Season || episode != this.Watched[name].Episode) return 0;
+		if (season != this.Watched[name]?.Season || episode != this.Watched[name]?.Episode) return 0;
 
 		return this.Watched[name]?.Time ?? 0;
+	}
+
+	static async Remove(name) {
+		await this.LoadWatched();
+
+		delete this.Watched[name];
 	}
 }
 

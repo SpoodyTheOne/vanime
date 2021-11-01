@@ -1,0 +1,7 @@
+class ScrollSection
+{
+    constructor(div)
+    {
+        
+    }
+}

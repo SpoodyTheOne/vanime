@@ -93,6 +93,21 @@ ipcMain.handle("History.GetEpisode", (event, name) => {
 	return History.GetEpisode(name);
 });
 
+ipcMain.handle("History.Remove", (event, name) => {
+	return History.Remove(name);
+});
+
+let SavedBeforeClose = false;
+
+app.on("quit", async (event) => {
+	if (!SavedBeforeClose) {
+		event.preventDefault();
+		await History.SaveData();
+		SavedBeforeClose = true;
+		app.quit();
+	}
+});
+
 app.whenReady().then(() => {
 	new Wcofun({
 		headless: true,

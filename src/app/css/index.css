@@ -28,25 +28,3 @@ button {
 	cursor: pointer;
 	padding: none;
 }
-
-#tooltip {
-	position: fixed;
-	top: 100%;
-	left: 1px;
-	background-color: #2a2835;
-	border: 0.25vh solid #333141;
-	padding: 1vh;
-	border-radius: 5px;
-	width: fit-content;
-	opacity: 0;
-	transition: opacity 0.1s ease;
-	pointer-events: none;
-}
-
-#tooltip.active {
-	opacity: 1;
-}
-
-#tooltip h2 {
-	font-size: 2vh;
-}

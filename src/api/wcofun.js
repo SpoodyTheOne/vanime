@@ -26,11 +26,22 @@ class Wcofun {
 			});
 		};
 
-		this.RemoveAds = (Page) => {
+		/**
+		 * @param {Puppeteer.Page} Page
+		 */
+		this.RemoveAds = async (Page) => {
 			if (Page == null) return console.log("Cant remove ads of null");
 
-			return Page.waitForSelector(".vdo_stories_floating").then(() => {
-				Page.evaluate(`document.querySelector(".vdo_stories_floating").remove()`);
+			return new Promise((resolve) => {
+				return Page.waitForSelector(".vdo_stories_floating", { timeout: 2000 })
+					.then(() => {
+						return Page.evaluate(`document.querySelector(".vdo_stories_floating").remove()`).then(() => {
+							resolve();
+						});
+					})
+					.catch(() => {
+						resolve();
+					});
 			});
 		};
 
@@ -42,6 +53,7 @@ class Wcofun {
 			page.goto("http://wcofun.com");
 			await this.RemoveAds(page);
 			await page.waitForSelector("#sidebar_today");
+			await page.waitForSelector("#sidebar_today a");
 			const data = await page.$eval("#sidebar_today", (element) => {
 				let url = element.children[1].href;
 				let image = element.children[1].children[0].src;
@@ -97,7 +109,7 @@ class Wcofun {
 
 		this.EpisodeGetAnime = async (url) => {
 			let page = await this.CreateWorkerPage();
-			page.goto(url);
+			await page.goto(url);
 			await this.RemoveAds(page);
 			await page.waitForSelector(".header-tag h2");
 			page.click(".header-tag h2");
