@@ -201,7 +201,7 @@ class Wcofun {
 
 				await content.waitForTimeout(500);
 
-				let src = await (await content.waitForSelector("video")).getProperty("src");
+				let src = await (await content.waitForSelector("#myJwVideo_media")).getProperty("src");
 			});
 		};
 

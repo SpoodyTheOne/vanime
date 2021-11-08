@@ -110,7 +110,7 @@ app.on("quit", async (event) => {
 
 app.whenReady().then(() => {
 	new Wcofun({
-		headless: true,
+		headless: false,
 		timeout: 5000,
 		args: [
 			"--disable-background-timer-throttling",
